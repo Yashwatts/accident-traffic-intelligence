@@ -2,7 +2,7 @@
 
 A real-time platform for reporting, tracking, and analyzing traffic accidents and road conditions in India. Built to save lives, improve road safety, and help citizens avoid dangerous routes.
 
-![Status](https://img.shields.io/badge/status-live-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue)
+![Status](https://img.shields.io/badge/status-live-brightgreen)
 
 ## 🌐 Live Application
 
@@ -162,7 +162,6 @@ Integrates Google Maps Directions API to:
 ## 🌏 India-Specific Features
 
 - Maps restricted to India geographical bounds
-- Cities: Mumbai, Delhi, Bengaluru, Hyderabad, Chennai, Kolkata
 - Distance calculations in kilometers
 - Indian testimonials and localization
 - Google Places autocomplete restricted to India
@@ -188,49 +187,6 @@ Integrates Google Maps Directions API to:
 - [ ] Integration with government traffic systems
 - [ ] Anonymous reporting option
 
-## 🐛 Known Issues
-
-- **Render Free Tier**: Backend sleeps after 15 minutes of inactivity (first request takes ~30 seconds)
-  - **Solution**: Upgrade to Render paid plan ($7/month) for always-on service
-- **Admin Verify Redirect**: Some users experience login redirect when verifying incidents
-  - **Status**: Under investigation with extensive logging
-
-## 💰 Cost Estimate
-
-### Free Tier (Development/Testing)
-- MongoDB Atlas: **Free** (512MB)
-- Vercel: **Free** (100GB bandwidth)
-- Render: **Free** (750 hours/month with sleep)
-- Google Maps: **Free** ($200 credit/month)
-- **Total: $0/month**
-
-### Production (Recommended)
-- MongoDB Atlas: **$9/month** (2GB, better performance)
-- Vercel: **Free** (sufficient for most use cases)
-- Render: **$7/month** (always-on, no sleep)
-- Google Maps: **Free** (under $200 usage)
-- **Total: ~$16/month**
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how you can help:
-
-1. **Report Bugs**: Open an issue with details
-2. **Suggest Features**: Share your ideas via issues
-3. **Submit PRs**: Fork, create a branch, and submit a pull request
-4. **Improve Docs**: Help improve documentation
-5. **Share**: Star ⭐ and share the project
-
-### Development Guidelines
-- Follow existing code style
-- Write meaningful commit messages
-- Test your changes locally
-- Update documentation if needed
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - Google Maps Platform for mapping services
@@ -238,10 +194,9 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - Vercel and Render for deployment platforms
 - All contributors and users who help improve road safety
 
-## 📞 Support & Contact
+##  Deployment
 
 - **Live Application**: [https://accident-traffic-intelligence-front.vercel.app](https://accident-traffic-intelligence-front.vercel.app)
-- **Issues**: [GitHub Issues](https://github.com/Yashwatts/accident-traffic-intelligence/issues)
 - **Repository**: [GitHub](https://github.com/Yashwatts/accident-traffic-intelligence)
 
 ## ⭐ Show Your Support
@@ -252,10 +207,10 @@ If this project helped you or you find it interesting, please give it a ⭐ on G
 
 <div align="center">
 
-**Built with ❤️ in India to make roads safer for everyone**
+**Developer - Yash**
 
 🚗 🚦 🛣️
 
-[View Live Demo](https://accident-traffic-intelligence-front.vercel.app) · [Report Bug](https://github.com/Yashwatts/accident-traffic-intelligence/issues) · [GitHub Repo](https://github.com/Yashwatts/accident-traffic-intelligence)
+[View Live Demo](https://accident-traffic-intelligence-front.vercel.app) · [GitHub Repo](https://github.com/Yashwatts/accident-traffic-intelligence)
 
 </div>
