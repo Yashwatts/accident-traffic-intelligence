@@ -2,7 +2,11 @@
 
 A real-time platform for reporting, tracking, and analyzing traffic accidents and road conditions in India. Built to save lives, improve road safety, and help citizens avoid dangerous routes.
 
-![Status](https://img.shields.io/badge/status-production%20ready-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue)
+![Status](https://img.shields.io/badge/status-live-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue)
+
+## 🌐 Live Application
+
+**🔗 [View Live Demo](https://accident-traffic-intelligence-front.vercel.app)**
 
 ## ✨ Features
 
@@ -70,10 +74,7 @@ accident-traffic/
 │   ├── .env              # Development environment variables
 │   └── .env.production   # Production environment template
 │
-├── docs/                 # Documentation files
-├── DEPLOYMENT.md         # Detailed deployment guide
-├── QUICK_DEPLOY.md       # Quick deployment steps
-└── CHECKLIST.md          # Pre-deployment checklist
+└── docs/                 # Documentation files
 ```
 
 ## 🚦 Quick Start (Local Development)
@@ -123,37 +124,12 @@ VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 
 Visit **http://localhost:5173** to see the app!
 
-## 🌍 Deployment (Production)
+## 🌍 Deployment
 
-This project is ready to deploy on:
-- **Frontend**: Vercel (recommended) or Netlify
-- **Backend**: Render (recommended), Railway, or Heroku
-- **Database**: MongoDB Atlas (already cloud-based)
-
-### Quick Deploy Steps
-
-1. **Push to GitHub**
-2. **Deploy Backend on Render** - See [QUICK_DEPLOY.md](QUICK_DEPLOY.md)
-3. **Deploy Frontend on Vercel** - See [QUICK_DEPLOY.md](QUICK_DEPLOY.md)
-4. **Update environment variables** with production URLs
-5. **Restrict Google Maps API key** to your domain
-
-**📖 Detailed guides:**
-- [QUICK_DEPLOY.md](QUICK_DEPLOY.md) - Step-by-step 25-minute deployment
-- [DEPLOYMENT.md](DEPLOYMENT.md) - Comprehensive deployment documentation
-- [CHECKLIST.md](CHECKLIST.md) - Pre-deployment verification checklist
-
-**Estimated deployment time: 25-30 minutes** ⚡
-
-## 📚 Documentation
-
-- [Architecture](architecture.md) - System design and data flow
-- [Design System](design-system.md) - UI components and styling
-- [Folder Structure](folder-structure.md) - Project organization
-- [API Documentation](rest-api-documentation.md) - REST API endpoints
-- [MongoDB Schemas](mongodb-schemas.md) - Database structure
-- [Security](SECURITY.md) - Security best practices
-- [Getting Started](GETTING_STARTED.md) - Development guide
+The application is deployed on:
+- **Frontend**: Vercel - [Live Site](https://accident-traffic-intelligence-front.vercel.app)
+- **Backend**: Render (Node.js + Express + Socket.io)
+- **Database**: MongoDB Atlas (Cloud)
 
 ## 🔑 Key Features Explained
 
@@ -264,13 +240,13 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📞 Support & Contact
 
-- **Documentation**: Browse the [docs/](docs/) folder
-- **Issues**: [GitHub Issues](https://github.com/YOUR_USERNAME/accident-traffic-intelligence/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/YOUR_USERNAME/accident-traffic-intelligence/discussions)
+- **Live Application**: [https://accident-traffic-intelligence-front.vercel.app](https://accident-traffic-intelligence-front.vercel.app)
+- **Issues**: [GitHub Issues](https://github.com/Yashwatts/accident-traffic-intelligence/issues)
+- **Repository**: [GitHub](https://github.com/Yashwatts/accident-traffic-intelligence)
 
 ## ⭐ Show Your Support
 
-If this project helped you or you find it interesting, please give it a ⭐ on GitHub! It helps others discover the project.
+If this project helped you or you find it interesting, please give it a ⭐ on GitHub!
 
 ---
 
@@ -280,6 +256,6 @@ If this project helped you or you find it interesting, please give it a ⭐ on G
 
 🚗 🚦 🛣️
 
-[Report Bug](https://github.com/YOUR_USERNAME/accident-traffic-intelligence/issues) · [Request Feature](https://github.com/YOUR_USERNAME/accident-traffic-intelligence/issues) · [View Demo](#)
+[View Live Demo](https://accident-traffic-intelligence-front.vercel.app) · [Report Bug](https://github.com/Yashwatts/accident-traffic-intelligence/issues) · [GitHub Repo](https://github.com/Yashwatts/accident-traffic-intelligence)
 
 </div>
