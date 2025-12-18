@@ -1,0 +1,285 @@
+# 🚗 Accident & Traffic Intelligence Platform
+
+A real-time platform for reporting, tracking, and analyzing traffic accidents and road conditions in India. Built to save lives, improve road safety, and help citizens avoid dangerous routes.
+
+![Status](https://img.shields.io/badge/status-production%20ready-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue)
+
+## ✨ Features
+
+### 👥 For Citizens
+- 📍 **Live Location-Based Reporting** - Report accidents and traffic incidents in real-time
+- 📸 **Photo Upload** - Attach photos to incident reports for verification
+- 🗺️ **Live Map View** - See all active incidents in your area with real-time updates
+- 🔔 **Real-Time Notifications** - Get instant alerts when your reports are verified/resolved/rejected
+- 🚦 **Route Advisor** - Plan safe routes avoiding accident-prone areas with Google Maps integration
+- 📊 **Personal Dashboard** - Track your reported incidents and their status
+
+### 🛡️ For Admins
+- ✅ **Incident Verification** - Review and verify citizen reports
+- 📈 **Analytics Dashboard** - View response times, incident trends, and weekly charts
+- 🎯 **Quick Actions** - Resolve or reject incidents with status updates
+- 📊 **Real-Time Monitoring** - Track all incidents across India with filtering options
+
+## 🚀 Tech Stack
+
+**Frontend:**
+- React 18 + Vite
+- Tailwind CSS (styling)
+- Zustand (state management)
+- Socket.io Client (real-time notifications)
+- Google Maps API (maps, routing, places)
+- Axios (API calls)
+- React Router (navigation)
+- Lucide Icons
+
+**Backend:**
+- Node.js + Express
+- MongoDB Atlas (database)
+- Socket.io Server (real-time events)
+- JWT (authentication)
+- Bcrypt (password hashing)
+- Multer (file uploads)
+- Express Rate Limit
+
+**Infrastructure:**
+- Frontend: Vercel (CDN, auto-deployment)
+- Backend: Render (Node.js hosting with WebSocket support)
+- Database: MongoDB Atlas (cloud database)
+
+## 📁 Project Structure
+
+```
+accident-traffic/
+├── frontend/              # React frontend application
+│   ├── src/
+│   │   ├── components/    # Reusable UI components
+│   │   ├── pages/        # Page components (routes)
+│   │   ├── lib/          # API client, socket, utils
+│   │   ├── stores/       # Zustand state management
+│   │   └── styles/       # Global CSS
+│   ├── .env.local        # Development environment variables
+│   └── .env.production   # Production environment template
+│
+├── backend/              # Node.js backend API
+│   ├── src/
+│   │   ├── services/     # Business logic (auth, incidents, users)
+│   │   ├── middleware/   # Auth, error handling, validation
+│   │   ├── utils/        # Helper functions
+│   │   ├── routes/       # API route definitions
+│   │   └── socket/       # Socket.io event handlers
+│   ├── .env              # Development environment variables
+│   └── .env.production   # Production environment template
+│
+├── docs/                 # Documentation files
+├── DEPLOYMENT.md         # Detailed deployment guide
+├── QUICK_DEPLOY.md       # Quick deployment steps
+└── CHECKLIST.md          # Pre-deployment checklist
+```
+
+## 🚦 Quick Start (Local Development)
+
+### Prerequisites
+- Node.js 18+ (with npm)
+- MongoDB Atlas account (free tier works)
+- Google Maps API key ([get one here](https://developers.google.com/maps/documentation/javascript/get-api-key))
+
+### Installation
+
+```bash
+# Clone repository
+git clone https://github.com/YOUR_USERNAME/accident-traffic-intelligence.git
+cd accident-traffic-intelligence
+
+# Backend setup
+cd backend
+npm install
+cp .env.example .env  # Edit with your MongoDB URI and secrets
+npm run dev  # Starts on http://localhost:5000
+
+# Frontend setup (new terminal)
+cd frontend
+npm install
+cp .env.example .env.local  # Edit with your Google Maps API key
+npm run dev  # Starts on http://localhost:5173
+```
+
+### Environment Variables
+
+**Backend (.env):**
+```env
+NODE_ENV=development
+MONGODB_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_random_secret_key
+JWT_REFRESH_SECRET=another_random_secret
+CORS_ORIGIN=http://localhost:3000
+```
+
+**Frontend (.env.local):**
+```env
+VITE_API_BASE_URL=http://localhost:5000
+VITE_SOCKET_URL=http://localhost:5000
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+```
+
+Visit **http://localhost:5173** to see the app!
+
+## 🌍 Deployment (Production)
+
+This project is ready to deploy on:
+- **Frontend**: Vercel (recommended) or Netlify
+- **Backend**: Render (recommended), Railway, or Heroku
+- **Database**: MongoDB Atlas (already cloud-based)
+
+### Quick Deploy Steps
+
+1. **Push to GitHub**
+2. **Deploy Backend on Render** - See [QUICK_DEPLOY.md](QUICK_DEPLOY.md)
+3. **Deploy Frontend on Vercel** - See [QUICK_DEPLOY.md](QUICK_DEPLOY.md)
+4. **Update environment variables** with production URLs
+5. **Restrict Google Maps API key** to your domain
+
+**📖 Detailed guides:**
+- [QUICK_DEPLOY.md](QUICK_DEPLOY.md) - Step-by-step 25-minute deployment
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Comprehensive deployment documentation
+- [CHECKLIST.md](CHECKLIST.md) - Pre-deployment verification checklist
+
+**Estimated deployment time: 25-30 minutes** ⚡
+
+## 📚 Documentation
+
+- [Architecture](architecture.md) - System design and data flow
+- [Design System](design-system.md) - UI components and styling
+- [Folder Structure](folder-structure.md) - Project organization
+- [API Documentation](rest-api-documentation.md) - REST API endpoints
+- [MongoDB Schemas](mongodb-schemas.md) - Database structure
+- [Security](SECURITY.md) - Security best practices
+- [Getting Started](GETTING_STARTED.md) - Development guide
+
+## 🔑 Key Features Explained
+
+### Real-Time Notifications
+Uses Socket.io for instant notifications when:
+- Admin verifies your incident ✅
+- Incident gets resolved 🎉
+- Incident gets rejected ❌
+- New incidents appear near you 📍
+
+### Route Advisor
+Integrates Google Maps Directions API to:
+- Calculate routes avoiding accident areas
+- Show distance and estimated time
+- Display incidents along the route
+- Provide turn-by-turn navigation
+
+### Analytics Dashboard (Admin)
+- Average response time (time to resolve incidents)
+- Today's stats (new, verified, resolved incidents)
+- Weekly incident trends (line chart)
+- Incident filtering by status and severity
+
+### Photo Upload
+- Citizens can attach photos when reporting incidents
+- Converts images to base64 for storage
+- Admin can view photos during verification
+- Helps verify authenticity of reports
+
+## 🌏 India-Specific Features
+
+- Maps restricted to India geographical bounds
+- Cities: Mumbai, Delhi, Bengaluru, Hyderabad, Chennai, Kolkata
+- Distance calculations in kilometers
+- Indian testimonials and localization
+- Google Places autocomplete restricted to India
+
+## 🔒 Security Features
+
+- JWT-based authentication with refresh tokens
+- Bcrypt password hashing
+- Rate limiting on API endpoints
+- CORS protection
+- Input validation and sanitization
+- Secure file upload handling
+- Protected admin routes
+
+## 📈 Future Enhancements
+
+- [ ] SMS/Email notifications for incident updates
+- [ ] Machine learning for accident hotspot prediction
+- [ ] Weather integration for weather-related incidents
+- [ ] Multi-language support (Hindi, Tamil, Telugu, etc.)
+- [ ] Mobile app (React Native)
+- [ ] Voice-to-text incident reporting
+- [ ] Integration with government traffic systems
+- [ ] Anonymous reporting option
+
+## 🐛 Known Issues
+
+- **Render Free Tier**: Backend sleeps after 15 minutes of inactivity (first request takes ~30 seconds)
+  - **Solution**: Upgrade to Render paid plan ($7/month) for always-on service
+- **Admin Verify Redirect**: Some users experience login redirect when verifying incidents
+  - **Status**: Under investigation with extensive logging
+
+## 💰 Cost Estimate
+
+### Free Tier (Development/Testing)
+- MongoDB Atlas: **Free** (512MB)
+- Vercel: **Free** (100GB bandwidth)
+- Render: **Free** (750 hours/month with sleep)
+- Google Maps: **Free** ($200 credit/month)
+- **Total: $0/month**
+
+### Production (Recommended)
+- MongoDB Atlas: **$9/month** (2GB, better performance)
+- Vercel: **Free** (sufficient for most use cases)
+- Render: **$7/month** (always-on, no sleep)
+- Google Maps: **Free** (under $200 usage)
+- **Total: ~$16/month**
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. **Report Bugs**: Open an issue with details
+2. **Suggest Features**: Share your ideas via issues
+3. **Submit PRs**: Fork, create a branch, and submit a pull request
+4. **Improve Docs**: Help improve documentation
+5. **Share**: Star ⭐ and share the project
+
+### Development Guidelines
+- Follow existing code style
+- Write meaningful commit messages
+- Test your changes locally
+- Update documentation if needed
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Google Maps Platform for mapping services
+- MongoDB Atlas for database hosting
+- Vercel and Render for deployment platforms
+- All contributors and users who help improve road safety
+
+## 📞 Support & Contact
+
+- **Documentation**: Browse the [docs/](docs/) folder
+- **Issues**: [GitHub Issues](https://github.com/YOUR_USERNAME/accident-traffic-intelligence/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/YOUR_USERNAME/accident-traffic-intelligence/discussions)
+
+## ⭐ Show Your Support
+
+If this project helped you or you find it interesting, please give it a ⭐ on GitHub! It helps others discover the project.
+
+---
+
+<div align="center">
+
+**Built with ❤️ in India to make roads safer for everyone**
+
+🚗 🚦 🛣️
+
+[Report Bug](https://github.com/YOUR_USERNAME/accident-traffic-intelligence/issues) · [Request Feature](https://github.com/YOUR_USERNAME/accident-traffic-intelligence/issues) · [View Demo](#)
+
+</div>
