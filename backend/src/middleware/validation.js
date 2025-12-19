@@ -144,6 +144,10 @@ export function validate(schema, source = 'body') {
       next();
     } catch (error) {
       if (error instanceof z.ZodError) {
+        const data = source === 'query' ? req.query : 
+                     source === 'params' ? req.params : 
+                     req.body;
+        
         const errors = error.errors.map(err => ({
           field: err.path.join('.'),
           message: err.message
