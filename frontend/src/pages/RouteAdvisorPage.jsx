@@ -344,11 +344,11 @@ function RouteAdvisorPage() {
 
   if (loadError) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-        <div className="text-center">
-          <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Map Loading Error</h2>
-          <p className="text-gray-600">Failed to load Google Maps. Please check your API key.</p>
+      <div className="min-h-screen bg-command-bg flex items-center justify-center p-6">
+        <div className="text-center glass-heavy rounded-2xl p-8">
+          <AlertCircle className="w-12 h-12 text-alert-critical mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-white mb-2">Map Loading Error</h2>
+          <p className="text-gray-400">Failed to load Google Maps. Please check your API key.</p>
         </div>
       </div>
     );
@@ -356,42 +356,46 @@ function RouteAdvisorPage() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-command-bg flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading Route Advisor...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pulse-500 mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading Route Advisor...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-command-bg space-y-6 md:space-y-8 p-4 sm:p-6 lg:p-8 animate-fade-in">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-4 py-6">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold mb-2 flex items-center">
-            <RouteIcon className="w-8 h-8 mr-3" />
-            Route Advisor
-          </h1>
-          <p className="text-primary-100">
-            Find the best route and navigate with real-time incident awareness
-          </p>
+      <div className="glass-heavy rounded-2xl p-6 sm:p-8 border-l-4 border-pulse-500 shadow-2xl shadow-pulse-500/10">
+        <div className="flex items-center gap-4 mb-3">
+          <div className="p-3 bg-pulse-500/10 rounded-xl">
+            <RouteIcon className="w-8 h-8 text-pulse-400" />
+          </div>
+          <div className="flex-1">
+            <h1 className="text-3xl sm:text-4xl font-display font-bold text-white mb-2 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              Route Advisor
+            </h1>
+            <p className="text-gray-400 text-sm sm:text-base">
+              Find the best route and navigate with real-time incident awareness
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="space-y-6">
         {/* Input Section */}
-        <div className="bg-white rounded-xl p-6 shadow-lg mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="glass-heavy rounded-2xl p-6 sm:p-8 shadow-xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
             {/* Origin Input */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2.5">
                 Starting Point
               </label>
               <div className="flex items-center space-x-2">
                 <div className="flex-1 relative">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-pulse-400 z-10" />
                   <Autocomplete
                     onLoad={onOriginLoad}
                     onPlaceChanged={onOriginPlaceChanged}
@@ -407,13 +411,13 @@ function RouteAdvisorPage() {
                       value={origin}
                       onChange={(e) => setOrigin(e.target.value)}
                       placeholder="Enter starting location"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-command-surface border border-command-border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-pulse-500/30 focus:border-pulse-500 transition-all duration-300 shadow-sm hover:border-pulse-500/30"
                     />
                   </Autocomplete>
                 </div>
                 <button
                   onClick={() => useCurrentLocation('origin')}
-                  className="p-3 bg-primary-100 text-primary-600 rounded-lg hover:bg-primary-200 transition-colors"
+                  className="p-3 bg-pulse-500/10 text-pulse-400 rounded-xl hover:bg-pulse-500/20 transition-all duration-300 border border-pulse-500/30 hover:scale-105 active:scale-95"
                   title="Use current location"
                 >
                   <Target className="w-5 h-5" />
@@ -423,12 +427,12 @@ function RouteAdvisorPage() {
 
             {/* Destination Input */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2.5">
                 Destination
               </label>
               <div className="flex items-center space-x-2">
                 <div className="flex-1 relative">
-                  <Navigation className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                  <Navigation className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-pulse-400 z-10" />
                   <Autocomplete
                     onLoad={onDestinationLoad}
                     onPlaceChanged={onDestinationPlaceChanged}
@@ -444,13 +448,13 @@ function RouteAdvisorPage() {
                       value={destination}
                       onChange={(e) => setDestination(e.target.value)}
                       placeholder="Enter destination"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-command-surface border border-command-border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-pulse-500/30 focus:border-pulse-500 transition-all duration-300 shadow-sm hover:border-pulse-500/30"
                     />
                   </Autocomplete>
                 </div>
                 <button
                   onClick={() => useCurrentLocation('destination')}
-                  className="p-3 bg-primary-100 text-primary-600 rounded-lg hover:bg-primary-200 transition-colors"
+                  className="p-3 bg-pulse-500/10 text-pulse-400 rounded-xl hover:bg-pulse-500/20 transition-all duration-300 border border-pulse-500/30 hover:scale-105 active:scale-95"
                   title="Use current location"
                 >
                   <Target className="w-5 h-5" />
@@ -460,15 +464,15 @@ function RouteAdvisorPage() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-col sm:flex-row items-center gap-3">
             <button
               onClick={calculateRoute}
               disabled={!originPlace || !destinationPlace}
               className={cn(
-                "flex-1 py-3 rounded-lg font-semibold text-white transition-all flex items-center justify-center space-x-2",
+                "w-full sm:flex-1 py-3.5 rounded-xl font-semibold text-white transition-all duration-300 flex items-center justify-center space-x-2",
                 !originPlace || !destinationPlace
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-primary-600 hover:bg-primary-700"
+                  ? "bg-command-surface border border-command-border cursor-not-allowed opacity-60"
+                  : "bg-gradient-to-r from-pulse-600 via-pulse-600 to-pulse-700 hover:from-pulse-500 hover:via-pulse-500 hover:to-pulse-600 shadow-lg shadow-pulse-500/20 hover:shadow-xl hover:shadow-pulse-500/30 hover:scale-105 active:scale-95"
               )}
             >
               <RouteIcon className="w-5 h-5" />
@@ -478,7 +482,7 @@ function RouteAdvisorPage() {
             {directionsResponse && !isNavigating && (
               <button
                 onClick={startNavigation}
-                className="flex-1 py-3 rounded-lg font-semibold text-white bg-green-600 hover:bg-green-700 transition-all flex items-center justify-center space-x-2"
+                className="w-full sm:flex-1 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-alert-safe to-alert-moderate hover:from-alert-safe/90 hover:to-alert-moderate/90 transition-all duration-300 shadow-lg shadow-alert-safe/20 hover:shadow-xl hover:shadow-alert-safe/30 flex items-center justify-center space-x-2 hover:scale-105 active:scale-95"
               >
                 <Play className="w-5 h-5" />
                 <span>Start Navigation</span>
@@ -488,7 +492,7 @@ function RouteAdvisorPage() {
             {isNavigating && (
               <button
                 onClick={stopNavigation}
-                className="flex-1 py-3 rounded-lg font-semibold text-white bg-red-600 hover:bg-red-700 transition-all flex items-center justify-center space-x-2"
+                className="w-full sm:flex-1 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-alert-critical to-alert-severe hover:from-alert-critical/90 hover:to-alert-severe/90 transition-all duration-300 shadow-lg shadow-alert-critical/20 hover:shadow-xl hover:shadow-alert-critical/30 flex items-center justify-center space-x-2 hover:scale-105 active:scale-95"
               >
                 <Square className="w-5 h-5" />
                 <span>Stop Navigation</span>
@@ -498,10 +502,10 @@ function RouteAdvisorPage() {
             {directionsResponse && (
               <button
                 onClick={clearRoute}
-                className="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="p-3 border border-command-border rounded-xl hover:bg-pulse-500/10 hover:border-pulse-500/30 transition-all duration-300"
                 title="Clear route"
               >
-                <X className="w-5 h-5 text-gray-600" />
+                <X className="w-5 h-5 text-gray-400 hover:text-white" />
               </button>
             )}
           </div>
@@ -509,46 +513,55 @@ function RouteAdvisorPage() {
 
         {/* Route Info */}
         {routeInfo && (
-          <div className="bg-white rounded-xl p-6 shadow-lg mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg">
-                <MapPin className="w-8 h-8 text-blue-600" />
+          <div className="glass-heavy rounded-2xl p-6 sm:p-8 shadow-xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+              <div className="flex items-center space-x-3 p-5 glass rounded-xl hover:bg-pulse-500/5 transition-all duration-300">
+                <div className="p-3 bg-pulse-500/10 rounded-xl">
+                  <MapPin className="w-8 h-8 text-pulse-400" />
+                </div>
                 <div>
-                  <div className="text-xs text-blue-600 font-semibold">Distance</div>
-                  <div className="text-xl font-bold text-blue-900">{routeInfo.distance}</div>
+                  <div className="text-xs text-gray-400 font-mono uppercase tracking-wider">Distance</div>
+                  <div className="text-2xl font-bold text-white">{routeInfo.distance}</div>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg">
-                <Clock className="w-8 h-8 text-green-600" />
+              <div className="flex items-center space-x-3 p-5 glass rounded-xl hover:bg-pulse-500/5 transition-all duration-300">
+                <div className="p-3 bg-alert-safe/10 rounded-xl">
+                  <Clock className="w-8 h-8 text-alert-safe" />
+                </div>
                 <div>
-                  <div className="text-xs text-green-600 font-semibold">Duration</div>
-                  <div className="text-xl font-bold text-green-900">{routeInfo.duration}</div>
+                  <div className="text-xs text-gray-400 font-mono uppercase tracking-wider">Duration</div>
+                  <div className="text-2xl font-bold text-white">{routeInfo.duration}</div>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 p-4 bg-red-50 rounded-lg">
-                <AlertTriangle className="w-8 h-8 text-red-600" />
+              <div className="flex items-center space-x-3 p-5 glass rounded-xl hover:bg-pulse-500/5 transition-all duration-300">
+                <div className="p-3 bg-alert-critical/10 rounded-xl">
+                  <AlertTriangle className="w-8 h-8 text-alert-critical" />
+                </div>
                 <div>
-                  <div className="text-xs text-red-600 font-semibold">Incidents</div>
-                  <div className="text-xl font-bold text-red-900">{incidentsOnRoute.length} on route</div>
+                  <div className="text-xs text-gray-400 font-mono uppercase tracking-wider">Incidents</div>
+                  <div className="text-2xl font-bold text-white">{incidentsOnRoute.length} on route</div>
                 </div>
               </div>
             </div>
 
             {/* Incidents Warning */}
             {incidentsOnRoute.length > 0 && (
-              <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="mt-6 p-5 glass rounded-xl border-l-4 border-alert-warning shadow-lg">
                 <div className="flex items-start space-x-3">
-                  <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
-                  <div>
-                    <h4 className="font-semibold text-yellow-900 mb-1">
+                  <div className="p-2 bg-alert-warning/10 rounded-lg">
+                    <AlertTriangle className="w-5 h-5 text-alert-warning mt-0.5" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-white mb-2">
                       Incidents on Your Route
                     </h4>
-                    <ul className="text-sm text-yellow-800 space-y-1">
+                    <ul className="text-sm text-gray-300 space-y-1.5">
                       {incidentsOnRoute.map((incident, index) => (
-                        <li key={incident._id || index}>
-                          • {incident.type} - {incident.severity}
+                        <li key={incident._id || index} className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 bg-alert-warning rounded-full"></span>
+                          <span>{incident.type} - <span className="text-alert-warning font-semibold">{incident.severity}</span></span>
                         </li>
                       ))}
                     </ul>
@@ -560,7 +573,7 @@ function RouteAdvisorPage() {
         )}
 
         {/* Map */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden" style={{ height: '600px' }}>
+        <div className="glass-heavy rounded-2xl shadow-xl overflow-hidden border border-command-border" style={{ height: '600px' }}>
           <GoogleMap
             mapContainerStyle={{ width: '100%', height: '100%' }}
             center={

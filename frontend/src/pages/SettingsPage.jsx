@@ -57,89 +57,90 @@ function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-          <p className="text-gray-600 mt-2">Manage your account and preferences</p>
-        </div>
+    <div className="space-y-6 md:space-y-8 animate-fade-in p-4 sm:p-6 lg:p-8">
+      <div className="glass-heavy rounded-2xl p-6 sm:p-8 border-l-4 border-pulse-500 shadow-2xl shadow-pulse-500/10">
+        <h1 className="text-3xl sm:text-4xl lg:text-display-md font-display text-white mb-2 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Settings</h1>
+        <p className="text-gray-400 text-sm sm:text-base">Manage your account and preferences</p>
+      </div>
 
-        <form onSubmit={handleSave} className="space-y-6">
-          {/* Profile Settings */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <div className="flex items-center space-x-2 mb-4">
-              <User className="w-5 h-5 text-gray-700" />
-              <h2 className="text-xl font-semibold text-gray-900">Profile Information</h2>
+      <form onSubmit={handleSave} className="space-y-6 md:space-y-8">
+        {/* Profile Settings */}
+        <div className="glass-heavy rounded-2xl p-6 sm:p-8 border border-command-border shadow-xl hover:shadow-2xl transition-shadow duration-300">
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="p-2.5 bg-pulse-500/10 rounded-xl">
+              <User className="w-5 h-5 text-pulse-400" />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-semibold text-white">Profile Information</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2.5">
+                First Name
+              </label>
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-command-surface border border-command-border rounded-lg text-white focus:ring-2 focus:ring-pulse-500/20 focus:border-pulse-500 transition-all"
+              />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  disabled
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Last Name
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-command-surface border border-command-border rounded-lg text-white focus:ring-2 focus:ring-pulse-500/20 focus:border-pulse-500 transition-all"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-command-surface/50 border border-command-border rounded-lg text-gray-400 focus:ring-2 focus:ring-pulse-500/20 focus:border-pulse-500 transition-all"
+                disabled
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-command-surface border border-command-border rounded-lg text-white focus:ring-2 focus:ring-pulse-500/20 focus:border-pulse-500 transition-all"
+              />
             </div>
           </div>
+        </div>
 
-          {/* Notification Settings */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+        {/* Notification Settings */}
+        <div className="glass-heavy rounded-xl p-6 border border-command-border">
             <div className="flex items-center space-x-2 mb-4">
-              <Bell className="w-5 h-5 text-gray-700" />
-              <h2 className="text-xl font-semibold text-gray-900">Notification Preferences</h2>
+              <Bell className="w-5 h-5 text-pulse-400" />
+              <h2 className="text-xl font-semibold text-white">Notification Preferences</h2>
             </div>
             
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900">Push Notifications</h3>
-                  <p className="text-sm text-gray-600">Receive push notifications on your device</p>
+                  <h3 className="text-sm font-medium text-white">Push Notifications</h3>
+                  <p className="text-sm text-gray-400">Receive push notifications on your device</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -155,8 +156,8 @@ function SettingsPage() {
               
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900">Email Notifications</h3>
-                  <p className="text-sm text-gray-600">Receive email updates about incidents</p>
+                  <h3 className="text-sm font-medium text-white">Email Notifications</h3>
+                  <p className="text-sm text-gray-400">Receive email updates about incidents</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -166,14 +167,14 @@ function SettingsPage() {
                     onChange={handleChange}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                  <div className="w-11 h-6 bg-command-surface peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pulse-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-command-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pulse-600"></div>
                 </label>
               </div>
               
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900">SMS Notifications</h3>
-                  <p className="text-sm text-gray-600">Receive SMS alerts for critical incidents</p>
+                  <h3 className="text-sm font-medium text-white">SMS Notifications</h3>
+                  <p className="text-sm text-gray-400">Receive SMS alerts for critical incidents</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -183,12 +184,12 @@ function SettingsPage() {
                     onChange={handleChange}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                  <div className="w-11 h-6 bg-command-surface peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pulse-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-command-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pulse-600"></div>
                 </label>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Alert Radius (km)
                 </label>
                 <input
@@ -198,9 +199,9 @@ function SettingsPage() {
                   onChange={handleChange}
                   min="1"
                   max="100"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-command-surface border border-command-border rounded-lg text-white focus:ring-2 focus:ring-pulse-500/20 focus:border-pulse-500 transition-all"
                 />
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-400 mt-1">
                   You'll receive alerts for incidents within this radius
                 </p>
               </div>
@@ -212,7 +213,7 @@ function SettingsPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex items-center space-x-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-pulse-600 to-pulse-700 text-white rounded-lg hover:from-pulse-500 hover:to-pulse-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-glow"
             >
               {isLoading ? (
                 <>
@@ -231,7 +232,6 @@ function SettingsPage() {
             </button>
           </div>
         </form>
-      </div>
     </div>
   );
 }

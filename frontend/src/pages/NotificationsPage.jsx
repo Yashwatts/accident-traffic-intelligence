@@ -36,36 +36,36 @@ const getPriorityLevel = (severity, distance) => {
 
 const priorityConfig = {
   urgent: {
-    color: 'bg-red-600',
-    textColor: 'text-red-700',
-    borderColor: 'border-red-500',
-    bgColor: 'bg-red-50',
+    color: 'bg-alert-critical',
+    textColor: 'text-alert-critical',
+    borderColor: 'border-alert-critical',
+    bgColor: 'bg-alert-critical/10',
     label: '🚨 URGENT',
-    ring: 'ring-red-500'
+    ring: 'ring-alert-critical'
   },
   high: {
-    color: 'bg-orange-500',
-    textColor: 'text-orange-700',
-    borderColor: 'border-orange-500',
-    bgColor: 'bg-orange-50',
+    color: 'bg-alert-high',
+    textColor: 'text-alert-high',
+    borderColor: 'border-alert-high',
+    bgColor: 'bg-alert-high/10',
     label: '⚠️ High Priority',
-    ring: 'ring-orange-500'
+    ring: 'ring-alert-high'
   },
   medium: {
-    color: 'bg-yellow-500',
-    textColor: 'text-yellow-700',
-    borderColor: 'border-yellow-500',
-    bgColor: 'bg-yellow-50',
+    color: 'bg-alert-moderate',
+    textColor: 'text-alert-moderate',
+    borderColor: 'border-alert-moderate',
+    bgColor: 'bg-alert-moderate/10',
     label: '⚡ Medium',
-    ring: 'ring-yellow-500'
+    ring: 'ring-alert-moderate'
   },
   low: {
-    color: 'bg-blue-500',
-    textColor: 'text-blue-700',
-    borderColor: 'border-blue-500',
-    bgColor: 'bg-blue-50',
+    color: 'bg-alert-info',
+    textColor: 'text-alert-info',
+    borderColor: 'border-alert-info',
+    bgColor: 'bg-alert-info/10',
     label: 'ℹ️ Info',
-    ring: 'ring-blue-500'
+    ring: 'ring-alert-info'
   }
 };
 
@@ -98,12 +98,12 @@ function AlertCard({ alert, onDismiss, userLocation }) {
       {/* Header */}
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-start space-x-3 flex-1">
-          <div className={cn("p-2 rounded-lg", config.color)}>
+          <div className={cn("p-2 rounded-lg", config.color, "shadow-glow")}>
             <AlertCircle className="w-5 h-5 text-white" />
           </div>
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
-              <span className="text-xs font-bold uppercase tracking-wide">
+              <span className={cn("text-xs font-bold uppercase tracking-wide", config.textColor)}>
                 {alert.type === 'verification' ? '✅ VERIFIED' : 
                  alert.type === 'resolution' ? '✅ RESOLVED' : 
                  alert.type === 'report' ? '📋 NEW REPORT' : 
@@ -118,7 +118,7 @@ function AlertCard({ alert, onDismiss, userLocation }) {
                 </span>
               )}
             </div>
-            <h3 className="font-semibold text-gray-900">
+            <h3 className="font-semibold text-white">
               {alert.incidentType ? `${alert.incidentType} - ${alert.description}` : alert.type}
             </h3>
           </div>
@@ -127,16 +127,16 @@ function AlertCard({ alert, onDismiss, userLocation }) {
         {!alert.dismissed && (
           <button
             onClick={() => onDismiss(alert.id)}
-            className="p-1 hover:bg-white/50 rounded-lg transition-colors"
+            className="p-1 hover:bg-white/10 rounded-lg transition-colors"
             title="Dismiss"
           >
-            <X className="w-5 h-5 text-gray-600" />
+            <X className="w-5 h-5 text-gray-400 hover:text-white" />
           </button>
         )}
       </div>
 
       {/* Distance and Time */}
-      <div className="flex items-center space-x-4 text-sm text-gray-600 mb-2">
+      <div className="flex items-center space-x-4 text-sm text-gray-400 mb-2">
         {distance && (
           <div className="flex items-center space-x-1">
             <Navigation className="w-4 h-4" />
@@ -150,8 +150,8 @@ function AlertCard({ alert, onDismiss, userLocation }) {
       </div>
 
       {/* Location */}
-      <div className="flex items-start space-x-2 text-sm text-gray-700 mb-3">
-        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+      <div className="flex items-start space-x-2 text-sm text-gray-300 mb-3">
+        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-pulse-400" />
         <span className="line-clamp-2">{alert.address}</span>
       </div>
 
@@ -159,21 +159,21 @@ function AlertCard({ alert, onDismiss, userLocation }) {
       {alert.description && (
         <div>
           <p className={cn(
-            "text-sm text-gray-700",
+            "text-sm text-gray-300",
             !isExpanded && "line-clamp-2"
           )}>
             {alert.description}
           </p>
           {alert.resolutionNotes && (
-            <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-xs font-medium text-green-800 mb-1">Resolution Notes:</p>
-              <p className="text-sm text-green-700">{alert.resolutionNotes}</p>
+            <div className="mt-2 p-2 bg-alert-safe/10 border border-alert-safe rounded-lg">
+              <p className="text-xs font-medium text-alert-safe mb-1">Resolution Notes:</p>
+              <p className="text-sm text-green-300">{alert.resolutionNotes}</p>
             </div>
           )}
           {alert.description.length > 100 && (
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-sm text-primary-600 hover:text-primary-700 font-medium mt-1 flex items-center"
+              className="text-sm text-pulse-400 hover:text-pulse-300 font-medium mt-1 flex items-center"
             >
               {isExpanded ? 'Show less' : 'Read more'}
               <ChevronDown className={cn(
@@ -187,27 +187,24 @@ function AlertCard({ alert, onDismiss, userLocation }) {
 
       {/* Actions */}
       {!alert.dismissed && (
-        <div className="flex items-center space-x-2 mt-4 pt-4 border-t border-gray-200">
+        <div className="flex items-center space-x-2 mt-4 pt-4 border-t border-command-border">
           <button
             onClick={() => onDismiss(alert.id)}
-            className="flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm flex items-center justify-center space-x-1"
-          >
+            className="flex-1 px-4 py-2 glass border border-command-border text-gray-300 rounded-lg hover:bg-white/10 transition-colors font-medium text-sm flex items-center justify-center space-x-1">
             <Check className="w-4 h-4" />
             <span>Dismiss</span>
           </button>
           {alert.location && alert.location.coordinates ? (
             <a
               href={`/dashboard/map?lat=${alert.location.coordinates[1]}&lng=${alert.location.coordinates[0]}`}
-              className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium text-sm flex items-center justify-center space-x-1"
-            >
+              className="flex-1 px-4 py-2 bg-gradient-to-r from-pulse-600 to-pulse-700 text-white rounded-lg hover:from-pulse-500 hover:to-pulse-600 transition-colors font-medium text-sm flex items-center justify-center space-x-1 shadow-glow">
               <MapPin className="w-4 h-4" />
               <span>View on Map</span>
             </a>
           ) : alert.incidentId && (
             <a
               href={`/dashboard/incidents/${alert.incidentId}`}
-              className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium text-sm flex items-center justify-center space-x-1"
-            >
+              className="flex-1 px-4 py-2 bg-gradient-to-r from-pulse-600 to-pulse-700 text-white rounded-lg hover:from-pulse-500 hover:to-pulse-600 transition-colors font-medium text-sm flex items-center justify-center space-x-1 shadow-glow">
               <AlertCircle className="w-4 h-4" />
               <span>View Details</span>
             </a>
@@ -233,10 +230,10 @@ function FilterDropdown({ filter, setFilter }) {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        className="flex items-center space-x-2 px-4 py-2 glass border border-command-border rounded-lg hover:bg-pulse-500/10 transition-colors"
       >
-        <Filter className="w-4 h-4" />
-        <span className="text-sm font-medium">
+        <Filter className="w-4 h-4 text-gray-300" />
+        <span className="text-sm font-medium text-gray-300">
           {options.find(o => o.value === filter)?.label}
         </span>
         <ChevronDown className={cn(
@@ -251,7 +248,7 @@ function FilterDropdown({ filter, setFilter }) {
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20 overflow-hidden">
+          <div className="absolute top-full right-0 mt-2 w-48 glass-heavy border border-command-border rounded-lg shadow-xl z-20 overflow-hidden backdrop-blur-xl">
             {options.map(option => (
               <button
                 key={option.value}
@@ -260,8 +257,8 @@ function FilterDropdown({ filter, setFilter }) {
                   setIsOpen(false);
                 }}
                 className={cn(
-                  "w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors",
-                  filter === option.value && "bg-primary-50 text-primary-700 font-medium"
+                  "w-full px-4 py-2 text-left text-sm hover:bg-pulse-500/10 transition-colors text-gray-300",
+                  filter === option.value && "bg-pulse-500/20 text-pulse-400 font-medium"
                 )}
               >
                 {option.label}
@@ -601,17 +598,17 @@ function NotificationsPage() {
   }).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-command-bg pb-20">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="glass-heavy border-b border-command-border sticky top-0 z-10 backdrop-blur-xl">
         <div className="max-w-3xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-white flex items-center">
                 <Bell className="w-6 h-6 mr-2" />
                 Alerts
               </h1>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-gray-400 mt-1">
                 {activeCount} active · {urgentCount} urgent
               </p>
             </div>
@@ -623,8 +620,8 @@ function NotificationsPage() {
                 className={cn(
                   "p-2 rounded-lg transition-colors",
                   soundEnabled 
-                    ? "bg-primary-100 text-primary-600" 
-                    : "bg-gray-100 text-gray-600"
+                    ? "bg-pulse-500/20 text-pulse-400" 
+                    : "bg-command-surface text-gray-400"
                 )}
                 title={soundEnabled ? "Sound on" : "Sound off"}
               >
@@ -635,8 +632,8 @@ function NotificationsPage() {
                 className={cn(
                   "p-2 rounded-lg transition-colors",
                   notificationsEnabled 
-                    ? "bg-primary-100 text-primary-600" 
-                    : "bg-gray-100 text-gray-600"
+                    ? "bg-pulse-500/20 text-pulse-400" 
+                    : "bg-command-surface text-gray-400"
                 )}
                 title={notificationsEnabled ? "Notifications on" : "Notifications off"}
               >
@@ -653,7 +650,7 @@ function NotificationsPage() {
               {activeCount > 0 && (
                 <button
                   onClick={handleDismissAll}
-                  className="text-sm text-gray-600 hover:text-gray-900 font-medium"
+                  className="text-sm text-gray-400 hover:text-white font-medium transition-colors"
                 >
                   Dismiss All
                 </button>
@@ -661,7 +658,7 @@ function NotificationsPage() {
               {alerts.some(a => a.dismissed) && (
                 <button
                   onClick={handleClearHistory}
-                  className="flex items-center space-x-1 text-sm text-red-600 hover:text-red-700 font-medium"
+                  className="flex items-center space-x-1 text-sm text-alert-critical hover:text-alert-severe font-medium transition-colors"
                 >
                   <Archive className="w-4 h-4" />
                   <span>Clear History</span>
@@ -677,19 +674,19 @@ function NotificationsPage() {
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
-              <div className="w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading alerts...</p>
+              <div className="w-12 h-12 border-4 border-pulse-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-400">Loading alerts...</p>
             </div>
           </div>
         ) : filteredAlerts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <Bell className="w-10 h-10 text-gray-400" />
+            <div className="w-20 h-20 bg-command-surface rounded-full flex items-center justify-center mb-4">
+              <Bell className="w-10 h-10 text-gray-500" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-white mb-2">
               {filter === 'dismissed' ? 'No dismissed alerts' : 'No alerts yet'}
             </h3>
-            <p className="text-gray-600 text-center max-w-md">
+            <p className="text-gray-400 text-center max-w-md">
               {notificationsEnabled 
                 ? "You'll receive real-time alerts about incidents in your area"
                 : "Enable notifications to receive alerts"}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   AlertCircle, 
@@ -12,9 +12,96 @@ import {
   CheckCircle,
   ArrowRight,
   Globe,
-  Smartphone
+  Smartphone,
+  Radio,
+  Eye,
+  Activity
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+
+// Animated incident marker for the map visualization
+function IncidentMarker({ x, y, severity, delay = 0 }) {
+  const severityColors = {
+    critical: 'bg-alert-critical',
+    high: 'bg-alert-high',
+    moderate: 'bg-alert-moderate',
+    low: 'bg-alert-info'
+  };
+
+  return (
+    <div 
+      className="absolute animate-ping-slow"
+      style={{ 
+        left: `${x}%`, 
+        top: `${y}%`,
+        animationDelay: `${delay}ms`
+      }}
+    >
+      <div className={cn(
+        "w-3 h-3 rounded-full shadow-glow",
+        severityColors[severity]
+      )} />
+      <div className={cn(
+        "absolute inset-0 rounded-full animate-pulse opacity-50",
+        severityColors[severity]
+      )} />
+    </div>
+  );
+}
+
+// Live activity ticker
+function LiveActivityTicker() {
+  const [activities, setActivities] = useState([
+    { id: 1, text: 'Accident reported on Highway 42', time: '2s ago', severity: 'critical' },
+    { id: 2, text: 'Traffic cleared on Main Street', time: '15s ago', severity: 'low' },
+    { id: 3, text: 'Road hazard detected near City Center', time: '32s ago', severity: 'high' },
+  ]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newActivities = [
+        'Vehicle collision on Route 5',
+        'Construction zone ahead on Park Ave',
+        'Weather alert: Heavy rain affecting visibility',
+        'Emergency services responding to incident',
+        'Traffic congestion building on Interstate'
+      ];
+      
+      setActivities(prev => {
+        const newActivity = {
+          id: Date.now(),
+          text: newActivities[Math.floor(Math.random() * newActivities.length)],
+          time: 'Just now',
+          severity: ['critical', 'high', 'moderate', 'low'][Math.floor(Math.random() * 4)]
+        };
+        return [newActivity, ...prev].slice(0, 3);
+      });
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="space-y-2">
+      {activities.map((activity) => (
+        <div 
+          key={activity.id}
+          className="flex items-center gap-2 text-sm animate-slide-down"
+        >
+          <Activity className={cn(
+            "w-4 h-4",
+            activity.severity === 'critical' ? 'text-alert-critical' :
+            activity.severity === 'high' ? 'text-alert-high' :
+            activity.severity === 'moderate' ? 'text-alert-moderate' :
+            'text-alert-info'
+          )} />
+          <span className="text-gray-300 flex-1">{activity.text}</span>
+          <span className="text-gray-500 text-xs">{activity.time}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 // Animated counter component
 function AnimatedCounter({ end, duration = 2000, suffix = '' }) {
@@ -44,28 +131,28 @@ function CityCard({ name, state, incidents, isActive }) {
     <div className={cn(
       "p-6 rounded-xl border-2 transition-all duration-300 cursor-pointer",
       isActive 
-        ? "border-primary-500 bg-primary-50 shadow-lg scale-105" 
-        : "border-gray-200 bg-white hover:border-primary-300 hover:shadow-md"
+        ? "border-pulse-500 glass-heavy shadow-glow scale-105" 
+        : "border-command-border glass hover:border-pulse-400 hover:shadow-glow"
     )}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-2">
           <MapPin className={cn(
             "w-5 h-5",
-            isActive ? "text-primary-600" : "text-gray-400"
+            isActive ? "text-pulse-400" : "text-gray-500"
           )} />
-          <h3 className="font-semibold text-gray-900">{name}</h3>
+          <h3 className="font-semibold text-white">{name}</h3>
         </div>
         {isActive && (
           <div className="flex items-center space-x-1">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-xs text-green-600 font-medium">Live</span>
+            <div className="w-2 h-2 bg-alert-safe rounded-full animate-pulse shadow-glow"></div>
+            <span className="text-xs text-alert-safe font-medium">Live</span>
           </div>
         )}
       </div>
-      <p className="text-sm text-gray-600 mb-2">{state}</p>
+      <p className="text-sm text-gray-400 mb-2">{state}</p>
       <div className="flex items-center space-x-2">
-        <AlertCircle className="w-4 h-4 text-orange-500" />
-        <span className="text-sm font-medium text-gray-700">
+        <AlertCircle className="w-4 h-4 text-alert-high" />
+        <span className="text-sm font-medium text-gray-300">
           {incidents} active incidents
         </span>
       </div>
@@ -76,12 +163,12 @@ function CityCard({ name, state, incidents, isActive }) {
 // Feature card component
 function FeatureCard({ icon: Icon, title, description }) {
   return (
-    <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-      <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-        <Icon className="w-6 h-6 text-primary-600" />
+    <div className="p-6 glass-heavy rounded-xl border border-command-border hover:shadow-glow transition-all duration-300 hover:-translate-y-1">
+      <div className="w-12 h-12 bg-gradient-to-br from-pulse-600 to-pulse-800 rounded-lg flex items-center justify-center mb-4 shadow-glow">
+        <Icon className="w-6 h-6 text-white" />
       </div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
+      <p className="text-gray-400">{description}</p>
     </div>
   );
 }
@@ -159,96 +246,188 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Background decorations */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200 rounded-full opacity-20 blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
+    <div className="min-h-screen">
+      {/* Hero Section - Map First Design */}
+      <section className="relative h-screen overflow-hidden">
+        {/* Animated Map Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-command-darker via-command-dark to-command-bg">
+          {/* Grid overlay */}
+          <div className="absolute inset-0 opacity-20" style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, rgb(14 165 233 / 0.15) 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }}></div>
+          
+          {/* Animated incident markers */}
+          <IncidentMarker x={25} y={30} severity="critical" delay={0} />
+          <IncidentMarker x={65} y={45} severity="high" delay={300} />
+          <IncidentMarker x={45} y={60} severity="moderate" delay={600} />
+          <IncidentMarker x={75} y={25} severity="low" delay={900} />
+          <IncidentMarker x={35} y={75} severity="high" delay={1200} />
+          <IncidentMarker x={55} y={35} severity="moderate" delay={1500} />
+          
+          {/* Pulsing circles for hotspots */}
+          <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-alert-critical/10 rounded-full animate-pulse blur-xl"></div>
+          <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-pulse-500/10 rounded-full animate-pulse blur-xl" style={{ animationDelay: '1s' }}></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-          <div className="text-center animate-fade-in">
-            {/* Badge */}
-            <div className="inline-flex items-center space-x-2 bg-primary-50 border border-primary-200 rounded-full px-4 py-2 mb-8">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium text-primary-700">
-                Real-time incident tracking
-              </span>
+        {/* Content Overlay */}
+        <div className="relative h-full flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              
+              {/* Left: Hero Content */}
+              <div className="space-y-8 animate-fade-in">
+                {/* Live indicator badge */}
+                <div className="inline-flex items-center gap-3 glass-heavy border border-pulse-500/30 rounded-full px-5 py-2.5 shadow-glow">
+                  <div className="relative flex items-center">
+                    <div className="w-2.5 h-2.5 bg-alert-critical rounded-full animate-pulse shadow-glow"></div>
+                    <div className="absolute w-2.5 h-2.5 bg-alert-critical rounded-full animate-ping"></div>
+                  </div>
+                  <span className="text-sm font-mono font-semibold text-pulse-400 uppercase tracking-wider">
+                    <AnimatedCounter end={stats.totalIncidents} /> Live Incidents
+                  </span>
+                  <Radio className="w-4 h-4 text-pulse-400 animate-pulse" />
+                </div>
+
+                {/* Main headline - Emotional & Action-oriented */}
+                <div>
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-6">
+                    <span className="text-white">Every Second</span>
+                    <br />
+                    <span className="text-white">Counts on the</span>
+                    <br />
+                    <span className="text-neon-cyan text-glow animate-pulse">Road.</span>
+                  </h1>
+                  
+                  <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-xl">
+                    Real-time accident tracking. Instant alerts. Community-powered safety.
+                    <span className="block mt-2 text-pulse-400 font-semibold">
+                      Be the eyes that save lives.
+                    </span>
+                  </p>
+                </div>
+
+                {/* CTAs */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link
+                    to="/register"
+                    className="group relative px-8 py-4 bg-gradient-to-r from-pulse-600 to-pulse-700 text-white rounded-xl font-bold text-lg shadow-glow hover:shadow-glow-lg transition-all duration-300 overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-pulse-500 to-pulse-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="relative flex items-center justify-center gap-2">
+                      <span>Report Incident Now</span>
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Link>
+                  
+                  <Link
+                    to="/dashboard/map"
+                    className="group px-8 py-4 glass-heavy border-2 border-command-border hover:border-pulse-500 text-white rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    <Eye className="w-5 h-5" />
+                    <span>View Live Map</span>
+                  </Link>
+                </div>
+
+                {/* Quick stats */}
+                <div className="grid grid-cols-3 gap-4 pt-4">
+                  <div className="glass rounded-lg p-4 border border-command-border">
+                    <div className="text-2xl font-bold text-white mb-1">
+                      <AnimatedCounter end={stats.activeUsers} />+
+                    </div>
+                    <div className="text-xs text-gray-400 uppercase tracking-wider font-mono">Active Users</div>
+                  </div>
+                  <div className="glass rounded-lg p-4 border border-command-border">
+                    <div className="text-2xl font-bold text-white mb-1">
+                      <AnimatedCounter end={stats.citiesCovered} />
+                    </div>
+                    <div className="text-xs text-gray-400 uppercase tracking-wider font-mono">Cities</div>
+                  </div>
+                  <div className="glass rounded-lg p-4 border border-command-border">
+                    <div className="text-2xl font-bold text-pulse-400 mb-1">
+                      {stats.avgResponseTime}<span className="text-sm">min</span>
+                    </div>
+                    <div className="text-xs text-gray-400 uppercase tracking-wider font-mono">Response</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: Live Activity Feed */}
+              <div className="hidden lg:block space-y-6 animate-slide-up">
+                {/* Live activity card */}
+                <div className="glass-heavy rounded-2xl p-6 border border-command-border shadow-glow">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-2">
+                      <Activity className="w-5 h-5 text-pulse-400" />
+                      <h3 className="text-lg font-bold text-white">Live Activity</h3>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-alert-critical rounded-full animate-pulse"></div>
+                      <span className="text-xs text-gray-400 font-mono">REAL-TIME</span>
+                    </div>
+                  </div>
+                  
+                  <LiveActivityTicker />
+                  
+                  <div className="mt-6 pt-4 border-t border-command-border">
+                    <Link 
+                      to="/dashboard/incidents"
+                      className="text-pulse-400 hover:text-pulse-300 text-sm font-semibold flex items-center gap-2 transition-colors"
+                    >
+                      <span>View All Incidents</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </div>
+
+                {/* System status indicators */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="glass rounded-xl p-4 border border-command-border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-alert-safe/20 rounded-lg flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-alert-safe" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-400 font-mono mb-1">SYSTEM STATUS</div>
+                        <div className="text-sm font-bold text-alert-safe">All Operational</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="glass rounded-xl p-4 border border-command-border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-pulse-500/20 rounded-lg flex items-center justify-center">
+                        <Globe className="w-5 h-5 text-pulse-400 animate-pulse" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-400 font-mono mb-1">COVERAGE</div>
+                        <div className="text-sm font-bold text-white">{stats.citiesCovered} Cities</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
+          </div>
+        </div>
 
-            {/* Main heading */}
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
-              Stay Informed.
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-blue-600">
-                Stay Safe.
-              </span>
-            </h1>
-
-            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Report and track accidents, traffic incidents, and emergencies in real-time.
-              Join thousands helping make communities safer.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-12">
-              <Link
-                to="/register"
-                className="group w-full sm:w-auto px-8 py-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
-              >
-                <span className="font-semibold">Get Started Free</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
-                to="/login"
-                className="w-full sm:w-auto px-8 py-4 bg-white text-gray-900 border-2 border-gray-300 rounded-lg hover:border-primary-500 transition-all duration-300 font-semibold"
-              >
-                Sign In
-              </Link>
-            </div>
-
-            {/* Live Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <div className="text-3xl font-bold text-primary-600 mb-1">
-                  <AnimatedCounter end={stats.totalIncidents} />+
-                </div>
-                <div className="text-sm text-gray-600">Incidents Reported</div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <div className="text-3xl font-bold text-primary-600 mb-1">
-                  <AnimatedCounter end={stats.activeUsers} />+
-                </div>
-                <div className="text-sm text-gray-600">Active Users</div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <div className="text-3xl font-bold text-primary-600 mb-1">
-                  <AnimatedCounter end={stats.citiesCovered} />+
-                </div>
-                <div className="text-sm text-gray-600">Cities Covered</div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <div className="text-3xl font-bold text-primary-600 mb-1">
-                  {stats.avgResponseTime}
-                  <span className="text-xl">min</span>
-                </div>
-                <div className="text-sm text-gray-600">Avg Response Time</div>
-              </div>
-            </div>
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-gray-600 rounded-full p-1">
+            <div className="w-1 h-3 bg-pulse-400 rounded-full mx-auto animate-pulse"></div>
           </div>
         </div>
       </section>
 
       {/* Interactive City Preview */}
-      <section className="py-20 bg-white">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Active in Your City
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               See real-time incident tracking across major cities. Select any city to explore.
             </p>
           </div>
@@ -268,19 +447,19 @@ function HomePage() {
           </div>
 
           {/* City Stats */}
-          <div className="mt-12 p-8 bg-gradient-to-r from-primary-50 to-blue-50 rounded-2xl border border-primary-200">
+          <div className="mt-12 p-8 glass-heavy rounded-2xl border border-pulse-500/30 shadow-glow">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-2xl font-bold text-white mb-2">
                   {cities[activeCityIndex].name}, {cities[activeCityIndex].state}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-400">
                   Currently tracking {cities[activeCityIndex].incidents} active incidents
                 </p>
               </div>
               <Link
                 to="/dashboard/map"
-                className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+                className="px-6 py-3 bg-gradient-to-r from-pulse-600 to-pulse-700 text-white rounded-lg hover:from-pulse-500 hover:to-pulse-600 transition-all font-medium shadow-glow"
               >
                 View Live Map
               </Link>
@@ -290,13 +469,13 @@ function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Why Choose Incident Reporter?
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               Powerful features designed to keep you informed and your community safe.
             </p>
           </div>
@@ -316,50 +495,50 @@ function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 bg-white">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               How It Works
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               Get started in three simple steps
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+            <div className="text-center glass-heavy rounded-2xl p-8 border border-command-border hover:shadow-glow transition-all">
+              <div className="w-16 h-16 bg-gradient-to-br from-pulse-600 to-pulse-800 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold shadow-glow">
                 1
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-white mb-2">
                 Create Account
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-400">
                 Sign up in seconds with your email or phone number
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+            <div className="text-center glass-heavy rounded-2xl p-8 border border-command-border hover:shadow-glow transition-all">
+              <div className="w-16 h-16 bg-gradient-to-br from-pulse-600 to-pulse-800 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold shadow-glow">
                 2
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-white mb-2">
                 Set Your Location
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-400">
                 Enable location services to receive relevant alerts
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+            <div className="text-center glass-heavy rounded-2xl p-8 border border-command-border hover:shadow-glow transition-all">
+              <div className="w-16 h-16 bg-gradient-to-br from-pulse-600 to-pulse-800 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold shadow-glow">
                 3
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-white mb-2">
                 Stay Informed
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-400">
                 Get real-time updates and report incidents instantly
               </p>
             </div>
@@ -368,77 +547,77 @@ function HomePage() {
       </section>
 
       {/* Testimonials / Social Proof */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Trusted by Communities
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="glass-heavy rounded-xl border border-command-border p-6 hover:shadow-glow transition-all">
               <div className="flex items-center mb-4">
-                <div className="flex text-yellow-400">
+                <div className="flex text-alert-moderate">
                   {[...Array(5)].map((_, i) => (
                     <CheckCircle key={i} className="w-5 h-5 fill-current" />
                   ))}
                 </div>
               </div>
-              <p className="text-gray-700 mb-4">
+              <p className="text-gray-300 mb-4">
                 "Incredible platform! I've been able to avoid traffic jams and stay safe during emergencies. The real-time updates are a game changer."
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                  <Users className="w-5 h-5 text-primary-600" />
+                <div className="w-10 h-10 bg-pulse-500/20 rounded-full flex items-center justify-center">
+                  <Users className="w-5 h-5 text-pulse-400" />
                 </div>
                 <div className="ml-3">
-                  <p className="font-semibold text-gray-900">Priya Sharma</p>
-                  <p className="text-sm text-gray-600">Mumbai, Maharashtra</p>
+                  <p className="font-semibold text-white">Priya Sharma</p>
+                  <p className="text-sm text-gray-400">Mumbai, Maharashtra</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="glass-heavy rounded-xl border border-command-border p-6 hover:shadow-glow transition-all">
               <div className="flex items-center mb-4">
-                <div className="flex text-yellow-400">
+                <div className="flex text-alert-moderate">
                   {[...Array(5)].map((_, i) => (
                     <CheckCircle key={i} className="w-5 h-5 fill-current" />
                   ))}
                 </div>
               </div>
-              <p className="text-gray-700 mb-4">
+              <p className="text-gray-300 mb-4">
                 "As a first responder, this tool helps me coordinate with my team and get to incidents faster. Highly recommend!"
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-primary-600" />
+                <div className="w-10 h-10 bg-pulse-500/20 rounded-full flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-pulse-400" />
                 </div>
                 <div className="ml-3">
-                  <p className="font-semibold text-gray-900">Michael Chen</p>
-                  <p className="text-sm text-gray-600">Emergency Responder</p>
+                  <p className="font-semibold text-white">Michael Chen</p>
+                  <p className="text-sm text-gray-400">Emergency Responder</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="glass-heavy rounded-xl border border-command-border p-6 hover:shadow-glow transition-all">
               <div className="flex items-center mb-4">
-                <div className="flex text-yellow-400">
+                <div className="flex text-alert-moderate">
                   {[...Array(5)].map((_, i) => (
                     <CheckCircle key={i} className="w-5 h-5 fill-current" />
                   ))}
                 </div>
               </div>
-              <p className="text-gray-700 mb-4">
+              <p className="text-gray-300 mb-4">
                 "The community reporting feature is fantastic. I feel more connected and informed about what's happening in my neighborhood."
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                  <Globe className="w-5 h-5 text-primary-600" />
+                <div className="w-10 h-10 bg-pulse-500/20 rounded-full flex items-center justify-center">
+                  <Globe className="w-5 h-5 text-pulse-400" />
                 </div>
                 <div className="ml-3">
-                  <p className="font-semibold text-gray-900">Amit Patel</p>
-                  <p className="text-sm text-gray-600">Bengaluru, Karnataka</p>
+                  <p className="font-semibold text-white">Amit Patel</p>
+                  <p className="text-sm text-gray-400">Bengaluru, Karnataka</p>
                 </div>
               </div>
             </div>
@@ -447,25 +626,26 @@ function HomePage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 bg-gradient-to-r from-primary-600 to-blue-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Smartphone className="w-16 h-16 text-white mx-auto mb-6" />
+      <section className="py-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-pulse-600/20 to-neon-cyan/20 blur-3xl"></div>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Smartphone className="w-16 h-16 text-pulse-400 mx-auto mb-6 animate-pulse" />
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to Get Started?
           </h2>
-          <p className="text-xl text-white/90 mb-8">
+          <p className="text-xl text-gray-300 mb-8">
             Join thousands of users staying informed and safe every day.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Link
               to="/register"
-              className="w-full sm:w-auto px-8 py-4 bg-white text-primary-600 rounded-lg hover:bg-gray-100 transition-all duration-300 shadow-lg font-semibold"
+              className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-pulse-600 to-pulse-700 text-white rounded-lg hover:from-pulse-500 hover:to-pulse-600 transition-all duration-300 shadow-glow font-semibold"
             >
               Create Free Account
             </Link>
             <Link
               to="/login"
-              className="w-full sm:w-auto px-8 py-4 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white/10 transition-all duration-300 font-semibold"
+              className="w-full sm:w-auto px-8 py-4 glass-heavy text-white border-2 border-command-border hover:border-pulse-500 rounded-lg transition-all duration-300 font-semibold"
             >
               Sign In
             </Link>

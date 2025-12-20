@@ -25,7 +25,7 @@ const incidentTypes = [
     id: 'accident',
     label: 'Vehicle Accident',
     icon: Car,
-    color: 'bg-red-500',
+    color: 'bg-alert-critical',
     defaultSeverity: 'severe',
     description: 'Car crash, collision'
   },
@@ -33,7 +33,7 @@ const incidentTypes = [
     id: 'traffic',
     label: 'Traffic Jam',
     icon: Car,
-    color: 'bg-orange-500',
+    color: 'bg-alert-high',
     defaultSeverity: 'moderate',
     description: 'Heavy congestion'
   },
@@ -41,7 +41,7 @@ const incidentTypes = [
     id: 'hazard',
     label: 'Road Hazard',
     icon: AlertTriangle,
-    color: 'bg-yellow-500',
+    color: 'bg-alert-moderate',
     defaultSeverity: 'high',
     description: 'Debris, pothole, danger'
   },
@@ -49,7 +49,7 @@ const incidentTypes = [
     id: 'construction',
     label: 'Construction',
     icon: Construction,
-    color: 'bg-blue-500',
+    color: 'bg-pulse-600',
     defaultSeverity: 'low',
     description: 'Road work, lane closure'
   },
@@ -57,7 +57,7 @@ const incidentTypes = [
     id: 'weather',
     label: 'Weather Alert',
     icon: CloudRain,
-    color: 'bg-gray-500',
+    color: 'bg-command-400',
     defaultSeverity: 'moderate',
     description: 'Flooding, ice, visibility'
   },
@@ -65,11 +65,11 @@ const incidentTypes = [
 
 // Severity options
 const severityLevels = [
-  { value: 'low', label: 'Low', color: 'bg-green-500', emoji: '🟢' },
-  { value: 'moderate', label: 'Moderate', color: 'bg-yellow-500', emoji: '🟡' },
-  { value: 'high', label: 'High', color: 'bg-orange-500', emoji: '🟠' },
-  { value: 'severe', label: 'Severe', color: 'bg-red-500', emoji: '🔴' },
-  { value: 'critical', label: 'Critical', color: 'bg-red-700', emoji: '⛔' },
+  { value: 'low', label: 'Low', color: 'bg-alert-safe', emoji: '🟢' },
+  { value: 'moderate', label: 'Moderate', color: 'bg-alert-moderate', emoji: '🟡' },
+  { value: 'high', label: 'High', color: 'bg-alert-high', emoji: '🟠' },
+  { value: 'severe', label: 'Severe', color: 'bg-alert-critical', emoji: '🔴' },
+  { value: 'critical', label: 'Critical', color: 'bg-alert-critical', emoji: '⛔' },
 ];
 
 function CreateIncidentPage() {
@@ -202,8 +202,8 @@ function CreateIncidentPage() {
 
     setIsSubmitting(true);
 
-    // Optimistic UI - show success immediately
-    setShowSuccess(true);
+    // Optimistic UI - show success with smooth transition
+    setTimeout(() => setShowSuccess(true), 300);
 
     const incidentData = {
       type: selectedType.id,
@@ -233,7 +233,7 @@ function CreateIncidentPage() {
       // Redirect after animation
       setTimeout(() => {
         navigate('/dashboard/map');
-      }, 1500);
+      }, 1800);
     } catch (error) {
       console.error('Submit error:', error);
       
@@ -252,15 +252,15 @@ function CreateIncidentPage() {
   // Success animation screen
   if (showSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-white">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-command-darker to-command-dark">
         <div className="text-center animate-fade-in">
-          <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+          <div className="w-20 h-20 bg-gradient-to-br from-alert-safe to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce shadow-glow">
             <CheckCircle className="w-12 h-12 text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Report Submitted!</h2>
-          <p className="text-gray-600">Thank you for keeping your community safe</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Report Submitted!</h2>
+          <p className="text-gray-400">Thank you for keeping your community safe</p>
           <div className="mt-4">
-            <Loader className="w-5 h-5 text-primary-600 animate-spin mx-auto" />
+            <Loader className="w-5 h-5 text-pulse-400 animate-spin mx-auto" />
           </div>
         </div>
       </div>
@@ -268,27 +268,26 @@ function CreateIncidentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen pb-20">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="glass-heavy border-b border-command-border sticky top-0 z-10 backdrop-blur-xl">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Report Incident</h1>
-              <p className="text-sm text-gray-600">Step {currentStep} of 2</p>
+              <h1 className="text-xl font-bold text-white">Report Incident</h1>
+              <p className="text-sm text-gray-400">Step {currentStep} of 2</p>
             </div>
             <button
               onClick={() => navigate(-1)}
-              className="text-gray-600 hover:text-gray-900"
-            >
+              className="text-gray-400 hover:text-white transition-colors">
               <XCircle className="w-6 h-6" />
             </button>
           </div>
 
           {/* Progress bar */}
-          <div className="mt-4 h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div className="mt-4 h-1 bg-command-surface rounded-full overflow-hidden">
             <div
-              className="h-full bg-primary-600 transition-all duration-300"
+              className="h-full bg-gradient-to-r from-pulse-600 to-pulse-400 transition-all duration-300 shadow-glow"
               style={{ width: `${(currentStep / 2) * 100}%` }}
             />
           </div>
@@ -300,32 +299,36 @@ function CreateIncidentPage() {
         {currentStep === 1 && (
           <div className="space-y-4 animate-fade-in">
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-white mb-2">
                 What's happening?
               </h2>
-              <p className="text-gray-600">Select the type of incident</p>
+              <p className="text-gray-400">Select the type of incident</p>
             </div>
 
             <div className="grid grid-cols-1 gap-3">
-              {incidentTypes.map((type) => (
+              {incidentTypes.map((type, idx) => (
                 <button
                   key={type.id}
                   onClick={() => handleTypeSelect(type)}
                   className={cn(
-                    "flex items-center p-4 rounded-xl border-2 transition-all",
-                    "hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]",
+                    "flex items-center p-4 rounded-xl border-2 transition-all duration-300 animate-fade-in",
+                    "hover:shadow-glow hover:scale-[1.02] active:scale-[0.98] hover:-translate-y-0.5",
                     selectedType?.id === type.id
-                      ? "border-primary-500 bg-primary-50"
-                      : "border-gray-200 bg-white"
+                      ? "border-pulse-500 glass-heavy shadow-glow scale-[1.02]"
+                      : "border-command-border glass hover:border-pulse-500/30"
                   )}
+                  style={{ animationDelay: `${idx * 80}ms` }}
                 >
-                  <div className={cn("p-3 rounded-lg", type.color)}>
+                  <div className={cn("p-3 rounded-lg shadow-glow transition-transform duration-300", type.color, selectedType?.id === type.id && "scale-110 rotate-3")}>
                     <type.icon className="w-6 h-6 text-white" />
                   </div>
                   <div className="ml-4 text-left flex-1">
-                    <h3 className="font-semibold text-gray-900">{type.label}</h3>
-                    <p className="text-sm text-gray-600">{type.description}</p>
+                    <h3 className="font-semibold text-white transition-colors">{type.label}</h3>
+                    <p className="text-sm text-gray-400">{type.description}</p>
                   </div>
+                  {selectedType?.id === type.id && (
+                    <CheckCircle className="w-6 h-6 text-pulse-400 animate-scale-in" />
+                  )}
                 </button>
               ))}
             </div>
@@ -336,17 +339,17 @@ function CreateIncidentPage() {
         {currentStep === 2 && (
           <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in">
             {/* Location Section */}
-            <div className="bg-white rounded-xl p-4 border border-gray-200">
+            <div className="glass-heavy rounded-xl p-4 border border-command-border">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-gray-900 flex items-center">
-                  <MapPin className="w-5 h-5 mr-2 text-primary-600" />
+                <h3 className="font-semibold text-white flex items-center">
+                  <MapPin className="w-5 h-5 mr-2 text-pulse-400" />
                   Location
                 </h3>
                 <button
                   type="button"
                   onClick={handleGetLocation}
                   disabled={isLoadingLocation}
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center"
+                  className="text-sm text-pulse-400 hover:text-pulse-300 font-medium flex items-center transition-colors"
                 >
                   {isLoadingLocation ? (
                     <>
@@ -363,14 +366,14 @@ function CreateIncidentPage() {
               </div>
 
               {locationError ? (
-                <div className="flex items-start p-3 bg-red-50 border border-red-200 rounded-lg">
-                  <XCircle className="w-5 h-5 text-red-600 mt-0.5 mr-2 flex-shrink-0" />
+                <div className="flex items-start p-3 bg-alert-critical/10 border border-alert-critical rounded-lg">
+                  <XCircle className="w-5 h-5 text-alert-critical mt-0.5 mr-2 flex-shrink-0" />
                   <div className="flex-1">
-                    <p className="text-sm text-red-800">{locationError}</p>
+                    <p className="text-sm text-alert-critical">{locationError}</p>
                     <button
                       type="button"
                       onClick={handleGetLocation}
-                      className="text-sm text-red-600 font-medium mt-1 hover:underline"
+                      className="text-sm text-alert-critical font-medium mt-1 hover:underline"
                     >
                       Try again
                     </button>
@@ -378,23 +381,23 @@ function CreateIncidentPage() {
                 </div>
               ) : location ? (
                 <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 mr-2 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-alert-safe mt-0.5 mr-2 flex-shrink-0" />
                   <div>
-                    <p className="text-sm text-gray-900 font-medium">Location detected</p>
-                    <p className="text-xs text-gray-600 mt-1">{address}</p>
+                    <p className="text-sm text-white font-medium">Location detected</p>
+                    <p className="text-xs text-gray-400 mt-1">{address}</p>
                   </div>
                 </div>
               ) : (
                 <div className="text-center py-4">
-                  <Loader className="w-6 h-6 text-primary-600 animate-spin mx-auto" />
-                  <p className="text-sm text-gray-600 mt-2">Detecting location...</p>
+                  <Loader className="w-6 h-6 text-pulse-400 animate-spin mx-auto" />
+                  <p className="text-sm text-gray-400 mt-2">Detecting location...</p>
                 </div>
               )}
             </div>
 
             {/* Severity Selection */}
-            <div className="bg-white rounded-xl p-4 border border-gray-200">
-              <h3 className="font-semibold text-gray-900 mb-3">Severity Level</h3>
+            <div className="glass-heavy rounded-xl p-4 border border-command-border">
+              <h3 className="font-semibold text-white mb-3">Severity Level</h3>
               <div className="grid grid-cols-5 gap-2">
                 {severityLevels.map((level) => (
                   <button
@@ -419,17 +422,17 @@ function CreateIncidentPage() {
             </div>
 
             {/* Description (Optional) */}
-            <div className="bg-white rounded-xl p-4 border border-gray-200">
-              <label className="block font-semibold text-gray-900 mb-2">
+            <div className="glass-heavy rounded-xl p-4 border border-command-border">
+              <label className="block font-semibold text-white mb-2">
                 Additional Details
-                <span className="text-sm text-gray-500 font-normal ml-2">(Optional)</span>
+                <span className="text-sm text-gray-400 font-normal ml-2">(Optional)</span>
               </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Any additional information..."
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                className="w-full px-3 py-2 bg-command-surface border border-command-border text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent resize-none"
                 maxLength={500}
               />
               <p className="text-xs text-gray-500 mt-1 text-right">
@@ -438,10 +441,10 @@ function CreateIncidentPage() {
             </div>
 
             {/* Photos (Optional) */}
-            <div className="bg-white rounded-xl p-4 border border-gray-200">
-              <label className="block font-semibold text-gray-900 mb-3">
+            <div className="glass-heavy rounded-xl p-4 border border-command-border">
+              <label className="block font-semibold text-white mb-3">
                 Photos
-                <span className="text-sm text-gray-500 font-normal ml-2">(Optional)</span>
+                <span className="text-sm text-gray-400 font-normal ml-2">(Optional)</span>
               </label>
               
               {photos.length > 0 && (
@@ -451,12 +454,12 @@ function CreateIncidentPage() {
                       <img
                         src={photo}
                         alt={`Preview ${index + 1}`}
-                        className="w-full h-24 object-cover rounded-lg"
+                        className="w-full h-24 object-cover rounded-lg border border-command-border"
                       />
                       <button
                         type="button"
                         onClick={() => removePhoto(index)}
-                        className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600"
+                        className="absolute -top-2 -right-2 w-6 h-6 bg-alert-critical text-white rounded-full flex items-center justify-center hover:bg-alert-severe transition-colors shadow-lg"
                       >
                         <XCircle className="w-4 h-4" />
                       </button>
@@ -465,7 +468,7 @@ function CreateIncidentPage() {
                 </div>
               )}
 
-              <label className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 cursor-pointer transition-colors">
+              <label className="flex items-center justify-center p-4 border-2 border-dashed border-command-border rounded-lg hover:border-pulse-500 cursor-pointer transition-colors bg-command-surface/50 hover:bg-command-surface">
                 <input
                   type="file"
                   accept="image/*"
@@ -474,14 +477,14 @@ function CreateIncidentPage() {
                   className="hidden"
                 />
                 <Camera className="w-5 h-5 text-gray-400 mr-2" />
-                <span className="text-sm text-gray-600">Add photos</span>
+                <span className="text-sm text-gray-300">Add photos</span>
               </label>
             </div>
 
             {/* Info Banner */}
-            <div className="flex items-start p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <Info className="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
-              <p className="text-sm text-blue-800">
+            <div className="flex items-start p-3 bg-pulse-500/10 border border-pulse-500/30 rounded-lg">
+              <Info className="w-5 h-5 text-pulse-400 mt-0.5 mr-2 flex-shrink-0" />
+              <p className="text-sm text-gray-300">
                 Your report helps emergency responders and your community stay informed.
               </p>
             </div>
@@ -491,7 +494,7 @@ function CreateIncidentPage() {
               <button
                 type="button"
                 onClick={() => setCurrentStep(1)}
-                className="flex-1 px-6 py-4 bg-white border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+                className="flex-1 px-6 py-4 glass border border-command-border text-gray-300 rounded-xl font-semibold hover:bg-pulse-500/10 hover:border-pulse-500/30 transition-colors"
               >
                 Back
               </button>
@@ -499,21 +502,23 @@ function CreateIncidentPage() {
                 type="submit"
                 disabled={isSubmitting || !location}
                 className={cn(
-                  "flex-1 px-6 py-4 rounded-xl font-semibold transition-all",
+                  "flex-1 px-6 py-4 rounded-xl font-semibold transition-all duration-300",
                   "flex items-center justify-center space-x-2",
                   isSubmitting || !location
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-primary-600 text-white hover:bg-primary-700 active:scale-95"
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed opacity-60"
+                    : "btn-primary hover-pulse shadow-glow-sm hover:shadow-glow"
                 )}
               >
                 {isSubmitting ? (
                   <>
                     <Loader className="w-5 h-5 animate-spin" />
-                    <span>Submitting...</span>
+                    <span className="loading-dots flex gap-1\">
+                      Submitting<span>.</span><span>.</span><span>.</span>
+                    </span>
                   </>
                 ) : (
                   <>
-                    <Send className="w-5 h-5" />
+                    <Send className="w-5 h-5 transition-transform group-hover:translate-x-0.5\" />
                     <span>Submit Report</span>
                   </>
                 )}

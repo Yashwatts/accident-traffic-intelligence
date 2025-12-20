@@ -128,15 +128,15 @@ const generateAnalytics = (incidents) => {
 // Stats Card Component
 function StatsCard({ title, value, change, icon: Icon, color = 'primary' }) {
   const colorConfig = {
-    primary: 'bg-primary-100 text-primary-600',
-    success: 'bg-green-100 text-green-600',
-    warning: 'bg-yellow-100 text-yellow-600',
-    danger: 'bg-red-100 text-red-600',
-    info: 'bg-blue-100 text-blue-600'
+    primary: 'bg-pulse-500/20 text-pulse-400',
+    success: 'bg-green-500/20 text-green-400',
+    warning: 'bg-yellow-500/20 text-yellow-400',
+    danger: 'bg-red-500/20 text-red-400',
+    info: 'bg-blue-500/20 text-blue-400'
   };
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+    <div className="glass-heavy rounded-xl p-6 border border-command-border transition-all">
       <div className="flex items-start justify-between mb-4">
         <div className={cn("p-3 rounded-lg", colorConfig[color])}>
           <Icon className="w-6 h-6" />
@@ -144,15 +144,15 @@ function StatsCard({ title, value, change, icon: Icon, color = 'primary' }) {
         {change && (
           <div className={cn(
             "flex items-center space-x-1 text-sm font-medium px-2 py-1 rounded",
-            change > 0 ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'
+            change > 0 ? 'text-green-400 bg-green-500/20' : 'text-red-400 bg-red-500/20'
           )}>
             <TrendingUp className={cn("w-4 h-4", change < 0 && "rotate-180")} />
             <span>{Math.abs(change)}%</span>
           </div>
         )}
       </div>
-      <h3 className="text-2xl font-bold text-gray-900 mb-1">{value}</h3>
-      <p className="text-sm text-gray-600">{title}</p>
+      <h3 className="text-2xl font-bold text-white mb-1">{value}</h3>
+      <p className="text-sm text-gray-400">{title}</p>
     </div>
   );
 }
@@ -162,27 +162,33 @@ function BarChart({ data, title }) {
   const maxValue = Math.max(...data.map(d => d.incidents));
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-gray-200">
-      <h3 className="text-lg font-bold text-gray-900 mb-6">{title}</h3>
+    <div className="glass-heavy rounded-xl p-6 border border-command-border">
+      <h3 className="text-lg font-bold text-white mb-6">{title}</h3>
       <div className="space-y-4">
         {data.map((item, idx) => (
           <div key={`chart-${item.date}-${idx}`}>
             <div className="flex items-center justify-between text-sm mb-1">
-              <span className="text-gray-600">{item.date}</span>
+              <span className="text-gray-400">{item.date}</span>
               <div className="flex items-center space-x-4">
-                <span className="text-primary-600 font-medium">{item.incidents} new</span>
-                <span className="text-green-600 font-medium">{item.resolved} resolved</span>
+                <span className="text-pulse-400 font-medium">{item.incidents} new</span>
+                <span className="text-green-400 font-medium">{item.resolved} resolved</span>
               </div>
             </div>
-            <div className="relative h-8 bg-gray-100 rounded-lg overflow-hidden">
-              <div
-                className="absolute left-0 top-0 h-full bg-primary-500 rounded-lg transition-all duration-500"
-                style={{ width: `${(item.incidents / maxValue) * 100}%` }}
-              />
-              <div
-                className="absolute left-0 top-0 h-full bg-green-500 rounded-lg transition-all duration-500"
-                style={{ width: `${(item.resolved / maxValue) * 100}%` }}
-              />
+            <div className="space-y-1">
+              {/* New incidents bar */}
+              <div className="relative h-3 bg-command-surface rounded-lg overflow-hidden">
+                <div
+                  className="absolute left-0 top-0 h-full bg-pulse-600 rounded-lg transition-all duration-500"
+                  style={{ width: `${(item.incidents / maxValue) * 100}%` }}
+                />
+              </div>
+              {/* Resolved incidents bar */}
+              <div className="relative h-3 bg-command-surface rounded-lg overflow-hidden">
+                <div
+                  className="absolute left-0 top-0 h-full bg-green-600 rounded-lg transition-all duration-500"
+                  style={{ width: `${(item.resolved / maxValue) * 100}%` }}
+                />
+              </div>
             </div>
           </div>
         ))}
@@ -196,7 +202,7 @@ function IncidentRow({ incident, onVerify, onReject, onResolve, onDelete, onView
   const [showActions, setShowActions] = useState(false);
   
   return (
-    <div className="bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors">
+    <div className="bg-command-surface border-b border-command-border hover:bg-command-elevated transition-colors">
       <div className="px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Incident Info */}
@@ -208,33 +214,33 @@ function IncidentRow({ incident, onVerify, onReject, onResolve, onDelete, onView
               )}>
                 {incident.severity}
               </span>
-              <span className="font-semibold text-gray-900 capitalize">{incident.type}</span>
+              <span className="font-semibold text-white capitalize">{incident.type}</span>
               {incident.status === 'pending' && (
-                <span className="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full flex items-center space-x-1">
+                <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs font-medium rounded-full flex items-center space-x-1">
                   <Clock className="w-3 h-3" />
                   <span>Pending Verification</span>
                 </span>
               )}
               {incident.status === 'verified' && (
-                <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full flex items-center space-x-1">
+                <span className="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs font-medium rounded-full flex items-center space-x-1">
                   <ShieldCheck className="w-3 h-3" />
                   <span>Verified</span>
                 </span>
               )}
               {incident.status === 'active' && (
-                <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full flex items-center space-x-1">
+                <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs font-medium rounded-full flex items-center space-x-1">
                   <ShieldCheck className="w-3 h-3" />
                   <span>Active</span>
                 </span>
               )}
               {incident.status === 'resolved' && (
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full flex items-center space-x-1">
+                <span className="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs font-medium rounded-full flex items-center space-x-1">
                   <ShieldCheck className="w-3 h-3" />
                   <span>Resolved</span>
                 </span>
               )}
             </div>
-            <p className="text-sm text-gray-600 line-clamp-1 mb-2">
+            <p className="text-sm text-gray-400 line-clamp-1 mb-2">
               {incident.description || 'No description provided'}
             </p>
             <div className="flex items-center space-x-4 text-xs text-gray-500">
@@ -287,7 +293,7 @@ function IncidentRow({ incident, onVerify, onReject, onResolve, onDelete, onView
             )}
             <button
               onClick={() => onViewDetails(incident)}
-              className="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium flex items-center space-x-1"
+              className="px-3 py-1.5 border border-command-border text-gray-300 rounded-lg hover:bg-command-elevated transition-colors text-sm font-medium flex items-center space-x-1"
             >
               <Eye className="w-4 h-4" />
               <span>View</span>
@@ -295,9 +301,9 @@ function IncidentRow({ incident, onVerify, onReject, onResolve, onDelete, onView
             <div className="relative">
               <button
                 onClick={() => setShowActions(!showActions)}
-                className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-command-elevated rounded-lg transition-colors"
               >
-                <MoreVertical className="w-5 h-5 text-gray-600" />
+                <MoreVertical className="w-5 h-5 text-gray-400" />
               </button>
               {showActions && (
                 <>
@@ -305,13 +311,13 @@ function IncidentRow({ incident, onVerify, onReject, onResolve, onDelete, onView
                     className="fixed inset-0 z-10"
                     onClick={() => setShowActions(false)}
                   />
-                  <div className="absolute right-0 top-full mt-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20 overflow-hidden">
+                  <div className="absolute right-0 top-full mt-1 w-40 glass-heavy border border-command-border rounded-lg shadow-lg z-20 overflow-hidden">
                     <button
                       onClick={() => {
                         onDelete(incident._id || incident.id);
                         setShowActions(false);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center space-x-2"
+                      className="w-full px-4 py-2 text-left text-sm text-red-400 hover:bg-red-500/20 transition-colors flex items-center space-x-2"
                     >
                       <Trash2 className="w-4 h-4" />
                       <span>Delete</span>
@@ -321,7 +327,7 @@ function IncidentRow({ incident, onVerify, onReject, onResolve, onDelete, onView
                         // Flag for review
                         setShowActions(false);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
+                      className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-command-elevated transition-colors flex items-center space-x-2"
                     >
                       <Flag className="w-4 h-4" />
                       <span>Flag</span>
@@ -384,7 +390,7 @@ function ExportDropdown() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium flex items-center space-x-2"
+        className="px-4 py-2 bg-pulse-600 text-white rounded-lg hover:bg-pulse-700 transition-colors font-medium flex items-center space-x-2"
       >
         <Download className="w-4 h-4" />
         <span>Export</span>
@@ -394,24 +400,24 @@ function ExportDropdown() {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20 overflow-hidden">
+          <div className="absolute right-0 top-full mt-2 w-48 glass-heavy border border-command-border rounded-lg shadow-lg z-20 overflow-hidden">
             <button
               onClick={exportCSV}
-              className="w-full px-4 py-3 text-left text-sm hover:bg-gray-50 transition-colors flex items-center space-x-3"
+              className="w-full px-4 py-3 text-left text-sm hover:bg-command-elevated transition-colors flex items-center space-x-3"
             >
-              <FileText className="w-4 h-4 text-gray-600" />
+              <FileText className="w-4 h-4 text-gray-400" />
               <div>
-                <div className="font-medium text-gray-900">Export as CSV</div>
+                <div className="font-medium text-white">Export as CSV</div>
                 <div className="text-xs text-gray-500">Excel compatible</div>
               </div>
             </button>
             <button
               onClick={exportJSON}
-              className="w-full px-4 py-3 text-left text-sm hover:bg-gray-50 transition-colors flex items-center space-x-3"
+              className="w-full px-4 py-3 text-left text-sm hover:bg-command-elevated transition-colors flex items-center space-x-3"
             >
-              <FileText className="w-4 h-4 text-gray-600" />
+              <FileText className="w-4 h-4 text-gray-400" />
               <div>
-                <div className="font-medium text-gray-900">Export as JSON</div>
+                <div className="font-medium text-white">Export as JSON</div>
                 <div className="text-xs text-gray-500">Developer friendly</div>
               </div>
             </button>
@@ -569,27 +575,27 @@ function AdminDashboardPage() {
 
   if (!analytics) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-command-bg">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
+          <div className="w-12 h-12 border-4 border-pulse-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-command-bg pb-20">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-command-elevated/95 backdrop-blur-xl border-b border-command-border">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center">
-                <BarChart3 className="w-8 h-8 mr-3 text-primary-600" />
+              <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
+                <BarChart3 className="w-8 h-8 mr-3 text-pulse-500" />
                 Admin Dashboard
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-400">
                 Monitor and manage incidents in real-time
               </p>
             </div>
@@ -597,7 +603,7 @@ function AdminDashboardPage() {
               <button
                 onClick={handleRefresh}
                 disabled={isRefreshing}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center space-x-2"
+                className="px-4 py-2 border border-command-border rounded-lg hover:bg-command-surface transition-colors font-medium flex items-center space-x-2 text-gray-300"
               >
                 <RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin")} />
                 <span>Refresh</span>
@@ -614,14 +620,12 @@ function AdminDashboardPage() {
           <StatsCard
             title="Total Incidents"
             value={analytics.totalIncidents}
-            change={12}
             icon={AlertCircle}
             color="primary"
           />
           <StatsCard
             title="Pending Verification"
             value={analytics.pendingVerification}
-            change={-8}
             icon={Clock}
             color="warning"
           />
@@ -634,14 +638,12 @@ function AdminDashboardPage() {
           <StatsCard
             title="Resolved Today"
             value={analytics.resolvedToday}
-            change={15}
             icon={CheckCircle}
             color="success"
           />
           <StatsCard
             title="Avg Response Time"
             value={analytics.avgResponseTime}
-            change={-5}
             icon={TrendingUp}
             color="info"
           />
@@ -652,8 +654,8 @@ function AdminDashboardPage() {
           <BarChart data={analytics.weeklyData} title="7-Day Incident Trend" />
           
           {/* Incidents by Type */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-900 mb-6">Incidents by Type</h3>
+          <div className="glass-heavy rounded-xl p-6 border border-command-border">
+            <h3 className="text-lg font-bold text-white mb-6">Incidents by Type</h3>
             <div className="space-y-4">
               {Object.entries(analytics.incidentsByType).map(([type, count]) => {
                 const total = Object.values(analytics.incidentsByType).reduce((a, b) => a + b, 0);
@@ -661,12 +663,12 @@ function AdminDashboardPage() {
                 return (
                   <div key={type}>
                     <div className="flex items-center justify-between text-sm mb-1">
-                      <span className="text-gray-700 capitalize font-medium">{type}</span>
-                      <span className="text-gray-900 font-semibold">{count}</span>
+                      <span className="text-gray-300 capitalize font-medium">{type}</span>
+                      <span className="text-white font-semibold">{count}</span>
                     </div>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-2 bg-command-surface rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-primary-500 rounded-full transition-all duration-500"
+                        className="h-full bg-pulse-600 rounded-full transition-all duration-500"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -678,14 +680,14 @@ function AdminDashboardPage() {
         </div>
 
         {/* Incident Management Section */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="glass-heavy rounded-xl border border-command-border overflow-hidden">
           {/* Table Header */}
-          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <div className="px-6 py-4 border-b border-command-border bg-command-surface">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-xl font-bold text-white">
                 Live Incident Management
               </h2>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-400">
                 {filteredIncidents.length} incidents
               </span>
             </div>
@@ -694,13 +696,13 @@ function AdminDashboardPage() {
             <div className="flex items-center space-x-4">
               {/* Search */}
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search incidents..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 bg-command-elevated border border-command-border text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent"
                 />
               </div>
 
@@ -708,7 +710,7 @@ function AdminDashboardPage() {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="px-4 py-2 bg-command-elevated border border-command-border text-white rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent"
               >
                 <option value="all">All Status</option>
                 <option value="pending">Pending</option>
@@ -720,7 +722,7 @@ function AdminDashboardPage() {
               <select
                 value={filterSeverity}
                 onChange={(e) => setFilterSeverity(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="px-4 py-2 bg-command-elevated border border-command-border text-white rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent"
               >
                 <option value="all">All Severity</option>
                 <option value="critical">Critical</option>
@@ -736,8 +738,8 @@ function AdminDashboardPage() {
           <div className="max-h-[600px] overflow-y-auto">
             {filteredIncidents.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12">
-                <AlertCircle className="w-12 h-12 text-gray-400 mb-4" />
-                <p className="text-gray-600">No incidents found</p>
+                <AlertCircle className="w-12 h-12 text-gray-600 mb-4" />
+                <p className="text-gray-400">No incidents found</p>
               </div>
             ) : (
               filteredIncidents.map(incident => (

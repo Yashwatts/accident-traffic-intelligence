@@ -154,6 +154,7 @@ function App() {
             }
           >
             <Route index element={<DashboardPage />} />
+            <Route path="admin" element={<AdminDashboardPage />} />
             <Route path="incidents" element={<IncidentsPage />} />
             <Route path="incidents/:id" element={<IncidentDetailPage />} />
             <Route path="incidents/new" element={<CreateIncidentPage />} />
@@ -163,18 +164,6 @@ function App() {
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="settings" element={<SettingsPage />} />
-          </Route>
-
-          {/* Admin Route */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <MainLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<AdminDashboardPage />} />
           </Route>
 
           {/* 404 */}

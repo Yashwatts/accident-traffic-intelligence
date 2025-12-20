@@ -23,23 +23,30 @@ const Toast = ({ id, message, type = 'info', duration = 5000 }) => {
   };
 
   const styles = {
-    success: 'bg-green-50 text-green-800 border-green-200',
-    error: 'bg-red-50 text-red-800 border-red-200',
-    warning: 'bg-yellow-50 text-yellow-800 border-yellow-200',
-    info: 'bg-blue-50 text-blue-800 border-blue-200',
+    success: 'glass-heavy text-alert-safe border-alert-safe/30 shadow-glow-sm',
+    error: 'glass-heavy text-alert-critical border-alert-critical/30 shadow-glow-sm',
+    warning: 'glass-heavy text-alert-warning border-alert-warning/30 shadow-glow-sm',
+    info: 'glass-heavy text-pulse-400 border-pulse-500/30 shadow-glow-sm',
+  };
+
+  const iconColors = {
+    success: 'text-alert-safe',
+    error: 'text-alert-critical',
+    warning: 'text-alert-warning',
+    info: 'text-pulse-400',
   };
 
   return (
     <div
-      className={`flex items-center space-x-3 px-4 py-3 rounded-lg border shadow-lg min-w-[300px] max-w-md animate-slide-in ${styles[type]}`}
+      className={`flex items-center space-x-3 px-4 py-3 rounded-lg border min-w-[300px] max-w-md animate-slide-in hover-lift ${styles[type]}`}
     >
-      <div className="flex-shrink-0">{icons[type]}</div>
-      <p className="flex-1 text-sm font-medium">{message}</p>
+      <div className={`flex-shrink-0 p-2 rounded-lg bg-${iconColors[type]}/10 border border-${iconColors[type]}/20 ${iconColors[type]}`}>{icons[type]}</div>
+      <p className="flex-1 text-sm font-medium text-white">{message}</p>
       <button
         onClick={() => removeToast(id)}
-        className="flex-shrink-0 hover:opacity-70 transition-opacity"
+        className="flex-shrink-0 p-1.5 hover:bg-pulse-500/10 rounded-lg transition-all border border-transparent hover:border-pulse-500/30"
       >
-        <X className="w-4 h-4" />
+        <X className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
       </button>
     </div>
   );

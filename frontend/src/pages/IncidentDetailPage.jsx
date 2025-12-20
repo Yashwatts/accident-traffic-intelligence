@@ -54,10 +54,10 @@ function IncidentDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-screen p-6 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading incident details...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pulse-500 mx-auto"></div>
+          <p className="mt-4 text-gray-400">Loading incident details...</p>
         </div>
       </div>
     );
@@ -65,14 +65,14 @@ function IncidentDetailPage() {
 
   if (!selectedIncident) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-screen p-6 flex items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Incident Not Found</h2>
-          <p className="text-gray-600 mb-6">The incident you're looking for doesn't exist.</p>
+          <AlertCircle className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-white mb-2">Incident Not Found</h2>
+          <p className="text-gray-400 mb-6">The incident you're looking for doesn't exist.</p>
           <button
             onClick={() => navigate('/dashboard/incidents')}
-            className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+            className="px-6 py-3 bg-gradient-to-r from-pulse-600 to-pulse-700 text-white rounded-lg hover:from-pulse-500 hover:to-pulse-600 transition-all shadow-glow"
           >
             Back to Incidents
           </button>
@@ -87,21 +87,20 @@ function IncidentDetailPage() {
   const isAdmin = user?.role === 'admin';
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen p-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-6">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
-          >
+            className="flex items-center space-x-2 text-gray-400 hover:text-white mb-4 transition-colors">
             <ArrowLeft className="w-5 h-5" />
             <span>Back</span>
           </button>
           
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Incident Details</h1>
+              <h1 className="text-3xl font-bold text-white mb-2">Incident Details</h1>
               <div className="flex items-center space-x-3">
                 <span className={cn(
                   "px-3 py-1 rounded-full text-sm font-medium",
@@ -111,14 +110,14 @@ function IncidentDetailPage() {
                 </span>
                 <span className={cn(
                   "px-3 py-1 rounded-full text-sm font-medium",
-                  incident.status === 'active' ? 'bg-blue-100 text-blue-800' :
-                  incident.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                  incident.status === 'resolved' ? 'bg-green-100 text-green-800' :
-                  'bg-gray-100 text-gray-800'
+                  incident.status === 'active' ? 'bg-pulse-500/20 text-pulse-300' :
+                  incident.status === 'pending' ? 'bg-alert-moderate/20 text-alert-moderate' :
+                  incident.status === 'resolved' ? 'bg-alert-safe/20 text-alert-safe' :
+                  'bg-command-surface text-gray-400'
                 )}>
                   {incident.status}
                 </span>
-                <span className="px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                <span className="px-3 py-1 rounded-full text-sm font-medium bg-neon-violet/20 text-neon-violet">
                   {incident.type}
                 </span>
               </div>
@@ -128,8 +127,7 @@ function IncidentDetailPage() {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setDeleteModal(true)}
-                  className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                >
+                  className="p-2 text-gray-400 hover:text-alert-critical hover:bg-alert-critical/10 rounded-lg transition-colors">
                   <Trash2 className="w-5 h-5" />
                 </button>
               </div>
@@ -141,25 +139,25 @@ function IncidentDetailPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Description */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Description</h2>
-              <p className="text-gray-700 whitespace-pre-wrap">
+            <div className="glass-heavy rounded-xl p-6 border border-command-border">
+              <h2 className="text-xl font-semibold text-white mb-4">Description</h2>
+              <p className="text-gray-300 whitespace-pre-wrap">
                 {incident.description || 'No description provided.'}
               </p>
             </div>
 
             {/* Location */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                <MapPin className="w-5 h-5 mr-2" />
+            <div className="glass-heavy rounded-xl p-6 border border-command-border">
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center">
+                <MapPin className="w-5 h-5 mr-2 text-pulse-400" />
                 Location
               </h2>
               <div className="space-y-2">
                 {incident.address?.formattedAddress && (
-                  <p className="text-gray-700">{incident.address.formattedAddress}</p>
+                  <p className="text-gray-300">{incident.address.formattedAddress}</p>
                 )}
                 {incident.location?.coordinates && (
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-400">
                     Coordinates: {incident.location.coordinates[1]?.toFixed(6)}, {incident.location.coordinates[0]?.toFixed(6)}
                   </p>
                 )}
@@ -167,7 +165,7 @@ function IncidentDetailPage() {
               
               {/* Map Preview */}
               {incident.location?.coordinates && (
-                <div className="mt-4 h-64 bg-gray-100 rounded-lg overflow-hidden">
+                <div className="mt-4 h-64 bg-command-surface rounded-lg overflow-hidden border border-command-border">
                   <iframe
                     width="100%"
                     height="100%"
@@ -180,15 +178,15 @@ function IncidentDetailPage() {
 
             {/* Photos */}
             {incident.photos && incident.photos.length > 0 && (
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Photos</h2>
+              <div className="glass-heavy rounded-xl p-6 border border-command-border">
+                <h2 className="text-xl font-semibold text-white mb-4">Photos</h2>
                 <div className="grid grid-cols-2 gap-4">
                   {incident.photos.map((photo, index) => (
                     <img
                       key={index}
                       src={photo}
                       alt={`Incident photo ${index + 1}`}
-                      className="w-full h-48 object-cover rounded-lg"
+                      className="w-full h-48 object-cover rounded-lg border border-command-border"
                     />
                   ))}
                 </div>
@@ -199,32 +197,32 @@ function IncidentDetailPage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Reported By */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <User className="w-5 h-5 mr-2" />
+            <div className="glass-heavy rounded-xl p-6 border border-command-border">
+              <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
+                <User className="w-5 h-5 mr-2 text-pulse-400" />
                 Reported By
               </h2>
               <div className="space-y-2">
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-white">
                   {incident.reportedBy?.firstName} {incident.reportedBy?.lastName}
                 </p>
-                <p className="text-sm text-gray-600">{incident.reportedBy?.email}</p>
+                <p className="text-sm text-gray-400">{incident.reportedBy?.email}</p>
                 {incident.reportedBy?.phoneNumber && (
-                  <p className="text-sm text-gray-600">{incident.reportedBy.phoneNumber}</p>
+                  <p className="text-sm text-gray-400">{incident.reportedBy.phoneNumber}</p>
                 )}
               </div>
             </div>
 
             {/* Timeline */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <Clock className="w-5 h-5 mr-2" />
+            <div className="glass-heavy rounded-xl p-6 border border-command-border">
+              <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
+                <Clock className="w-5 h-5 mr-2 text-pulse-400" />
                 Timeline
               </h2>
               <div className="space-y-3">
                 <div>
-                  <p className="text-sm text-gray-600">Reported</p>
-                  <p className="font-medium text-gray-900">
+                  <p className="text-sm text-gray-400">Reported</p>
+                  <p className="font-medium text-white">
                     {formatRelativeTime(incident.createdAt)}
                   </p>
                   <p className="text-xs text-gray-500">
@@ -234,8 +232,8 @@ function IncidentDetailPage() {
                 
                 {incident.updatedAt !== incident.createdAt && (
                   <div>
-                    <p className="text-sm text-gray-600">Last Updated</p>
-                    <p className="font-medium text-gray-900">
+                    <p className="text-sm text-gray-400">Last Updated</p>
+                    <p className="font-medium text-white">
                       {formatRelativeTime(incident.updatedAt)}
                     </p>
                   </div>
@@ -243,8 +241,8 @@ function IncidentDetailPage() {
 
                 {incident.verifiedAt && (
                   <div>
-                    <p className="text-sm text-gray-600">Verified</p>
-                    <p className="font-medium text-gray-900">
+                    <p className="text-sm text-gray-400">Verified</p>
+                    <p className="font-medium text-white">
                       {formatRelativeTime(incident.verifiedAt)}
                     </p>
                     {incident.verifiedBy && (
@@ -258,18 +256,18 @@ function IncidentDetailPage() {
             </div>
 
             {/* Verification Status */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Status</h2>
+            <div className="glass-heavy rounded-xl p-6 border border-command-border">
+              <h2 className="text-lg font-semibold text-white mb-4">Status</h2>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Current Status</span>
+                  <span className="text-sm text-gray-400">Current Status</span>
                   <span className={cn(
                     "px-3 py-1 rounded-full text-xs font-medium",
-                    incident.status === 'active' ? 'bg-blue-100 text-blue-800' :
-                    incident.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                    incident.status === 'resolved' ? 'bg-green-100 text-green-800' :
-                    incident.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                    'bg-gray-100 text-gray-800'
+                    incident.status === 'active' ? 'bg-pulse-500/20 text-pulse-300' :
+                    incident.status === 'pending' ? 'bg-alert-moderate/20 text-alert-moderate' :
+                    incident.status === 'resolved' ? 'bg-alert-safe/20 text-alert-safe' :
+                    incident.status === 'rejected' ? 'bg-alert-critical/20 text-alert-critical' :
+                    'bg-command-surface text-gray-400'
                   )}>
                     {incident.status}
                   </span>
@@ -277,15 +275,15 @@ function IncidentDetailPage() {
 
                 {incident.verified && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Verified</span>
-                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm text-gray-400">Verified</span>
+                    <CheckCircle className="w-5 h-5 text-status-resolved" />
                   </div>
                 )}
                 
                 {incident.updateCount > 0 && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Updates</span>
-                    <span className="text-sm font-medium text-gray-900">{incident.updateCount}</span>
+                    <span className="text-sm text-gray-400">Updates</span>
+                    <span className="text-sm font-medium text-white">{incident.updateCount}</span>
                   </div>
                 )}
               </div>
@@ -305,7 +303,7 @@ function IncidentDetailPage() {
                     addToast('Failed to verify incident', 'error');
                   }
                 }}
-                className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-status-resolved to-green-600 text-white rounded-lg hover:from-status-resolved/90 hover:to-green-500 transition-all shadow-lg"
               >
                 <Flag className="w-5 h-5" />
                 <span>Verify Incident</span>
