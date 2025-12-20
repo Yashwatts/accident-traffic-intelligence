@@ -45,6 +45,10 @@ const IncidentSchema = new Schema(
       country: String,
       postalCode: String,
     },
+    state: {
+      type: String,
+      index: true,
+    },
     reportedBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',

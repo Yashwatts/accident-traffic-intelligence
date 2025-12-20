@@ -6,9 +6,13 @@ import { logger } from '../../utils/logger.js';
  * Create a new incident
  */
 export const createIncident = async (incidentData, userId) => {
+  // Determine state from incident location (address.state)
+  const state = incidentData.address?.state || 'Unknown';
+
   const incident = new Incident({
     ...incidentData,
     reportedBy: userId,
+    state: state, // Use incident location's state
     status: 'pending',
   });
 
@@ -17,6 +21,7 @@ export const createIncident = async (incidentData, userId) => {
   logger.info('Incident created', {
     incidentId: incident._id,
     type: incident.type,
+    state: incident.state,
     userId,
   });
 
@@ -31,6 +36,8 @@ export const getIncidents = async (filters = {}, options = {}) => {
     type,
     severity,
     status,
+    state,
+    reportedBy,
     limit = 10,
     page = 1,
     sortBy = '-createdAt',
@@ -41,6 +48,8 @@ export const getIncidents = async (filters = {}, options = {}) => {
   if (type && type !== 'all') query.type = type;
   if (severity && severity !== 'all') query.severity = severity;
   if (status && status !== 'all') query.status = status;
+  if (state) query.state = state; // Filter by state for state-based admins
+  if (reportedBy) query.reportedBy = reportedBy;
 
   const skip = (page - 1) * limit;
 

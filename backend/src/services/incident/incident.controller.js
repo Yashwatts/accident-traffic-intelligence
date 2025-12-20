@@ -16,12 +16,14 @@ export const createIncidentController = async (req, res, next) => {
 
     const incident = await incidentService.createIncident(req.body, userId);
 
-    // Emit socket event for new incident (to all admins)
+    // Emit socket event for new incident to all admins
+    // Admins will see only incidents from their state when they query
     const io = getIO();
     io.to('admin').emit('incident:created', {
       incident,
       message: 'New incident reported',
-      type: 'incident_created'
+      type: 'incident_created',
+      state: incident.state
     });
 
     return ApiResponse.created(res, incident, 'Incident reported successfully');
@@ -36,7 +38,19 @@ export const createIncidentController = async (req, res, next) => {
  */
 export const getIncidentsController = async (req, res, next) => {
   try {
-    const result = await incidentService.getIncidents({}, req.query);
+    // If user is admin, filter by their assigned state
+    const options = { ...req.query };
+    
+    if (req.user?.role === 'admin' && req.user?.adminInfo?.assignedState) {
+      options.state = req.user.adminInfo.assignedState;
+    }
+    
+    // If reportedBy is specified, use it (for citizen filtering)
+    if (req.query.reportedBy) {
+      options.reportedBy = req.query.reportedBy;
+    }
+
+    const result = await incidentService.getIncidents({}, options);
 
     return ApiResponse.success(res, result, 'Incidents retrieved successfully');
   } catch (error) {

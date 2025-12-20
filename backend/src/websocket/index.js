@@ -118,10 +118,13 @@ const handleConnection = (io, socket) => {
     roomManager.subscribeToResponderRoom(socket);
   }
 
-  // Subscribe admins to admin room
+  // Subscribe admins to admin room (they'll be filtered by state when fetching incidents)
   if (socket.userRole === 'admin') {
     socket.join('admin');
-    logger.info('Admin joined admin room', { socketId: socket.id, userId: socket.userId });
+    logger.info('Admin joined admin room', { 
+      socketId: socket.id, 
+      userId: socket.userId
+    });
   }
 
   // Setup event handlers

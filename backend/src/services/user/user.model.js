@@ -78,6 +78,15 @@ const UserSchema = new Schema(
       index: true,
     },
     
+    // Admin Info
+    adminInfo: {
+      assignedState: {
+        type: String,
+        trim: true,
+        index: true,
+      },
+    },
+    
     // Responder Info
     responderInfo: {
       agency: String,
