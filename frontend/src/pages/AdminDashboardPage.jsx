@@ -254,7 +254,7 @@ function IncidentRow({ incident, onVerify, onReject, onResolve, onDelete, onView
               </span>
               <span className="flex items-center space-x-1">
                 <Users className="w-3 h-3" />
-                <span>Reporter: {incident.reportedBy?.name || 'Anonymous'}</span>
+                <span>Reporter: {incident.reportedBy ? `${incident.reportedBy.firstName} ${incident.reportedBy.lastName}` : 'Anonymous'}</span>
               </span>
             </div>
           </div>
