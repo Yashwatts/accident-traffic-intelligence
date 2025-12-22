@@ -3,6 +3,8 @@ import { createServer } from 'http';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import morgan from 'morgan';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { env, isProduction } from './config/env.js';
 import connectDatabase from './config/database.js';
 import logger, { morganStream } from './utils/logger.js';
@@ -17,6 +19,9 @@ import {
 import { generalLimiter } from './middleware/rateLimiter.js';
 import { errorHandler, notFoundHandler } from './middleware/error.js';
 import { initializeSocketServer, shutdownSocketServer } from './websocket/index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Initialize Express application
@@ -96,9 +101,24 @@ app.use(`/api/${env.API_VERSION}/auth`, authRoutes);
 app.use(`/api/${env.API_VERSION}/incidents`, incidentRoutes);
 
 /**
- * Error Handlers (must be last)
+ * Serve Frontend Static Files (Production)
  */
-app.use(notFoundHandler);
+if (isProduction) {
+  const frontendBuildPath = path.join(__dirname, '../../frontend/dist');
+  app.use(express.static(frontendBuildPath));
+  
+  // Handle SPA routing - serve index.html for all non-API routes
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  });
+}
+
+/**
+ * Error Handlers (must be last for non-production or after static file serving)
+ */
+if (!isProduction) {
+  app.use(notFoundHandler);
+}
 app.use(errorHandler);
 
 /**
