@@ -1,12 +1,15 @@
 import { NavLink } from 'react-router-dom';
-import { Home, AlertCircle, User, BarChart3, Settings, Plus, MapPin, Bell, Route, Activity, Shield, ChevronRight } from 'lucide-react';
+import { Home, AlertCircle, User, BarChart3, Settings, Plus, MapPin, Bell, Route, Activity, Shield, ChevronRight, X } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
 import { useAuthStore } from '../../store/authStore';
 import { cn } from '../../lib/utils';
 
 function Sidebar() {
-  const { isSidebarOpen } = useUIStore();
-  const { user } = useAuthStore();
+  const { isSidebarOpen, closeSidebar } = useUIStore();
+  const { user, isAuthenticated } = useAuthStore();
+
+  // Don't render sidebar if user is not authenticated
+  if (!isAuthenticated || !user) return null;
 
   // Organized navigation with sections for better hierarchy
   const getNavStructure = () => {
@@ -62,18 +65,44 @@ function Sidebar() {
 
   if (!isSidebarOpen) return null;
 
+  // Close sidebar when clicking a link on mobile
+  const handleLinkClick = () => {
+    if (window.innerWidth < 1024) {
+      closeSidebar();
+    }
+  };
+
   return (
-    <aside className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 glass-heavy border-r border-command-border overflow-y-auto scrollbar-thin z-40">
-      <div className="p-4 space-y-6">
+    <aside 
+      className={cn(
+        "fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 sm:w-72 lg:w-64",
+        "glass-heavy border-r border-command-border overflow-y-auto scrollbar-thin",
+        "z-50 lg:z-40",
+        "transform transition-transform duration-300 ease-in-out",
+        "lg:translate-x-0",
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+      )}
+    >
+      <div className="p-3 sm:p-4 space-y-4 sm:space-y-6 pb-6">
         
-        {/* Hero Action Button - More prominent */}
+        {/* Mobile close button */}
+        <button
+          onClick={closeSidebar}
+          className="lg:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-pulse-500/10 transition-colors"
+          aria-label="Close sidebar"
+        >
+          <X className="w-5 h-5 text-gray-400" />
+        </button>
+        
+        {/* Hero Action Button - Touch-friendly */}
         <NavLink
           to="/dashboard/incidents/new"
-          className="group relative flex items-center justify-center space-x-2 w-full px-4 py-3.5 bg-gradient-to-r from-alert-critical to-alert-high hover:from-alert-critical/90 hover:to-alert-high/90 text-white rounded-xl transition-all shadow-glow hover:shadow-glow-lg overflow-hidden"
+          onClick={handleLinkClick}
+          className="group relative flex items-center justify-center space-x-2 w-full px-4 py-4 sm:py-3.5 bg-gradient-to-r from-alert-critical to-alert-high hover:from-alert-critical/90 hover:to-alert-high/90 active:scale-98 text-white rounded-xl transition-all shadow-glow hover:shadow-glow-lg overflow-hidden touch-manipulation"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
           <Plus className="w-5 h-5 relative z-10" />
-          <span className="font-bold text-base relative z-10">Report Incident</span>
+          <span className="font-bold text-sm sm:text-base relative z-10">Report Incident</span>
           <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity relative z-10" />
         </NavLink>
 
@@ -84,12 +113,13 @@ function Sidebar() {
               key={item.to}
               to={item.to}
               end={item.to === '/dashboard' || item.to === '/admin'}
+              onClick={handleLinkClick}
               className={({ isActive }) =>
                 cn(
-                  'relative flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 group',
+                  'relative flex items-center justify-between px-3 py-3 sm:py-2.5 rounded-lg transition-all duration-200 group touch-manipulation',
                   isActive
                     ? 'bg-gradient-to-r from-pulse-500/20 to-pulse-600/10 text-white font-semibold border-l-4 border-pulse-400 pl-2 shadow-glow-sm'
-                    : 'text-gray-300 hover:bg-pulse-500/5 hover:text-white border-l-4 border-transparent hover:border-pulse-500/30 pl-2',
+                    : 'text-gray-300 hover:bg-pulse-500/5 active:bg-pulse-500/10 hover:text-white border-l-4 border-transparent hover:border-pulse-500/30 pl-2',
                   item.highlight && 'bg-neon-violet/10 border-neon-violet/30'
                 )
               }
@@ -98,23 +128,23 @@ function Sidebar() {
                 <>
                   <div className="flex items-center space-x-3">
                     <div className={cn(
-                      "w-9 h-9 rounded-lg flex items-center justify-center transition-all",
+                      "w-10 h-10 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-all flex-shrink-0",
                       isActive 
                         ? "bg-pulse-500/30 shadow-glow-sm" 
                         : "bg-command-surface group-hover:bg-pulse-500/20"
                     )}>
                       <item.icon className={cn(
-                        "w-4.5 h-4.5 transition-all",
+                        "w-5 h-5 sm:w-4.5 sm:h-4.5 transition-all",
                         isActive ? "text-pulse-300" : "text-gray-400 group-hover:text-pulse-400"
                       )} />
                     </div>
-                    <span className="text-sm">{item.label}</span>
+                    <span className="text-sm font-medium">{item.label}</span>
                   </div>
                   
                   {/* Badges */}
                   {item.badge && (
                     <div className={cn(
-                      "px-2 py-0.5 rounded-full text-xs font-mono font-bold",
+                      "px-2 py-1 sm:py-0.5 rounded-full text-xs font-mono font-bold flex-shrink-0",
                       item.badge === 'live' && "bg-alert-critical/20 text-alert-critical border border-alert-critical/30 animate-pulse",
                       item.badge === 'admin' && "bg-neon-violet/20 text-neon-violet border border-neon-violet/30",
                       typeof item.badge === 'string' && !['live', 'admin'].includes(item.badge) && "bg-pulse-500/20 text-pulse-400 border border-pulse-500/30"
@@ -146,12 +176,13 @@ function Sidebar() {
               <NavLink
                 key={item.to}
                 to={item.to}
+                onClick={handleLinkClick}
                 className={({ isActive }) =>
                   cn(
-                    'relative flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 group',
+                    'relative flex items-center justify-between px-3 py-3 sm:py-2.5 rounded-lg transition-all duration-200 group touch-manipulation',
                     isActive
                       ? 'bg-gradient-to-r from-pulse-500/20 to-pulse-600/10 text-white font-semibold border-l-4 border-pulse-400 pl-2 shadow-glow-sm'
-                      : 'text-gray-300 hover:bg-pulse-500/5 hover:text-white border-l-4 border-transparent hover:border-pulse-500/30 pl-2'
+                      : 'text-gray-300 hover:bg-pulse-500/5 active:bg-pulse-500/10 hover:text-white border-l-4 border-transparent hover:border-pulse-500/30 pl-2'
                   )
                 }
               >
@@ -159,21 +190,21 @@ function Sidebar() {
                   <>
                     <div className="flex items-center space-x-3">
                       <div className={cn(
-                        "w-9 h-9 rounded-lg flex items-center justify-center transition-all",
+                        "w-10 h-10 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-all flex-shrink-0",
                         isActive 
                           ? "bg-pulse-500/30 shadow-glow-sm" 
                           : "bg-command-surface group-hover:bg-pulse-500/20"
                       )}>
                         <item.icon className={cn(
-                          "w-4.5 h-4.5 transition-all",
+                          "w-5 h-5 sm:w-4.5 sm:h-4.5 transition-all",
                           isActive ? "text-pulse-300" : "text-gray-400 group-hover:text-pulse-400"
                         )} />
                       </div>
-                      <span className="text-sm">{item.label}</span>
+                      <span className="text-sm font-medium">{item.label}</span>
                     </div>
                     
                     {item.badge && (
-                      <div className="px-2 py-0.5 bg-alert-high/20 text-alert-high border border-alert-high/30 rounded-full text-xs font-mono font-bold">
+                      <div className="px-2 py-1 sm:py-0.5 bg-alert-high/20 text-alert-high border border-alert-high/30 rounded-full text-xs font-mono font-bold flex-shrink-0">
                         {item.badge}
                       </div>
                     )}
@@ -202,12 +233,13 @@ function Sidebar() {
                 <NavLink
                   key={item.to}
                   to={item.to}
+                  onClick={handleLinkClick}
                   className={({ isActive }) =>
                     cn(
-                      'relative flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 group',
+                      'relative flex items-center justify-between px-3 py-3 sm:py-2.5 rounded-lg transition-all duration-200 group touch-manipulation',
                       isActive
                         ? 'bg-gradient-to-r from-pulse-500/20 to-pulse-600/10 text-white font-semibold border-l-4 border-pulse-400 pl-2 shadow-glow-sm'
-                        : 'text-gray-300 hover:bg-pulse-500/5 hover:text-white border-l-4 border-transparent hover:border-pulse-500/30 pl-2'
+                        : 'text-gray-300 hover:bg-pulse-500/5 active:bg-pulse-500/10 hover:text-white border-l-4 border-transparent hover:border-pulse-500/30 pl-2'
                     )
                   }
                 >
@@ -215,17 +247,17 @@ function Sidebar() {
                     <>
                       <div className="flex items-center space-x-3">
                         <div className={cn(
-                          "w-9 h-9 rounded-lg flex items-center justify-center transition-all",
+                          "w-10 h-10 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-all flex-shrink-0",
                           isActive 
                             ? "bg-pulse-500/30 shadow-glow-sm" 
                             : "bg-command-surface group-hover:bg-pulse-500/20"
                         )}>
                           <item.icon className={cn(
-                            "w-4.5 h-4.5 transition-all",
+                            "w-5 h-5 sm:w-4.5 sm:h-4.5 transition-all",
                             isActive ? "text-pulse-300" : "text-gray-400 group-hover:text-pulse-400"
                           )} />
                         </div>
-                        <span className="text-sm">{item.label}</span>
+                        <span className="text-sm font-medium">{item.label}</span>
                       </div>
                       
                       {isActive && (
@@ -252,12 +284,13 @@ function Sidebar() {
               <NavLink
                 key={item.to}
                 to={item.to}
+                onClick={handleLinkClick}
                 className={({ isActive }) =>
                   cn(
-                    'relative flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 group',
+                    'relative flex items-center justify-between px-3 py-3 sm:py-2.5 rounded-lg transition-all duration-200 group touch-manipulation',
                     isActive
                       ? 'bg-gradient-to-r from-pulse-500/20 to-pulse-600/10 text-white font-semibold border-l-4 border-pulse-400 pl-2 shadow-glow-sm'
-                      : 'text-gray-300 hover:bg-pulse-500/5 hover:text-white border-l-4 border-transparent hover:border-pulse-500/30 pl-2'
+                      : 'text-gray-300 hover:bg-pulse-500/5 active:bg-pulse-500/10 hover:text-white border-l-4 border-transparent hover:border-pulse-500/30 pl-2'
                   )
                 }
               >
@@ -265,17 +298,17 @@ function Sidebar() {
                   <>
                     <div className="flex items-center space-x-3">
                       <div className={cn(
-                        "w-9 h-9 rounded-lg flex items-center justify-center transition-all",
+                        "w-10 h-10 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-all flex-shrink-0",
                         isActive 
                           ? "bg-pulse-500/30 shadow-glow-sm" 
                           : "bg-command-surface group-hover:bg-pulse-500/20"
                       )}>
                         <item.icon className={cn(
-                          "w-4.5 h-4.5 transition-all",
+                          "w-5 h-5 sm:w-4.5 sm:h-4.5 transition-all",
                           isActive ? "text-pulse-300" : "text-gray-400 group-hover:text-pulse-400"
                         )} />
                       </div>
-                      <span className="text-sm">{item.label}</span>
+                      <span className="text-sm font-medium">{item.label}</span>
                     </div>
                     
                     {isActive && (
@@ -288,8 +321,8 @@ function Sidebar() {
           </nav>
         </div>
 
-        {/* Enhanced Status Card with more info */}
-        <div className="relative glass-heavy rounded-xl p-4 border border-alert-safe/30 overflow-hidden">
+        {/* Enhanced Status Card with more info - Hidden on mobile to save space */}
+        <div className="hidden sm:block relative glass-heavy rounded-xl p-4 border border-alert-safe/30 overflow-hidden">
           {/* Background glow */}
           <div className="absolute top-0 right-0 w-20 h-20 bg-alert-safe/10 rounded-full blur-2xl"></div>
           

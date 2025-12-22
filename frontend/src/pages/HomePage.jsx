@@ -248,7 +248,7 @@ function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section - Map First Design */}
-      <section className="relative h-screen overflow-hidden">
+      <section className="relative min-h-screen overflow-hidden py-8 sm:py-12 md:py-0">
         {/* Animated Map Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-command-darker via-command-dark to-command-bg">
           {/* Grid overlay */}
@@ -271,14 +271,14 @@ function HomePage() {
         </div>
 
         {/* Content Overlay */}
-        <div className="relative h-full flex items-center">
+        <div className="relative min-h-screen md:h-full flex items-center py-8 sm:py-12 md:py-0">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
               
               {/* Left: Hero Content */}
-              <div className="space-y-8 animate-fade-in">
+              <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-fade-in">
                 {/* Live indicator badge */}
-                <div className="inline-flex items-center gap-3 glass-heavy border border-pulse-500/30 rounded-full px-5 py-2.5 shadow-glow">
+                <div className="inline-flex items-center gap-2 sm:gap-3 glass-heavy border border-pulse-500/30 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 shadow-glow text-sm sm:text-base">
                   <div className="relative flex items-center">
                     <div className="w-2.5 h-2.5 bg-alert-critical rounded-full animate-pulse shadow-glow"></div>
                     <div className="absolute w-2.5 h-2.5 bg-alert-critical rounded-full animate-ping"></div>
@@ -291,7 +291,7 @@ function HomePage() {
 
                 {/* Main headline - Emotional & Action-oriented */}
                 <div>
-                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-6">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold leading-tight mb-3 sm:mb-4 md:mb-6">
                     <span className="text-white">Every Second</span>
                     <br />
                     <span className="text-white">Counts on the</span>
@@ -299,7 +299,7 @@ function HomePage() {
                     <span className="text-neon-cyan text-glow animate-pulse">Road.</span>
                   </h1>
                   
-                  <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-xl">
+                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-xl">
                     Real-time accident tracking. Instant alerts. Community-powered safety.
                     <span className="block mt-2 text-pulse-400 font-semibold">
                       Be the eyes that save lives.
@@ -308,11 +308,11 @@ function HomePage() {
                 </div>
 
                 {/* CTAs */}
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <Link
                     to="/register"
-                    className="group relative px-8 py-4 bg-gradient-to-r from-pulse-600 to-pulse-700 text-white rounded-xl font-bold text-lg shadow-glow hover:shadow-glow-lg transition-all duration-300 overflow-hidden"
-                  >
+                    className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-pulse-600 to-pulse-700 text-white rounded-xl font-bold text-base sm:text-lg shadow-glow hover:shadow-glow-lg transition-all duration-300 overflow-hidden">
+                
                     <div className="absolute inset-0 bg-gradient-to-r from-pulse-500 to-pulse-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div className="relative flex items-center justify-center gap-2">
                       <span>Report Incident Now</span>
@@ -322,32 +322,32 @@ function HomePage() {
                   
                   <Link
                     to="/dashboard/map"
-                    className="group px-8 py-4 glass-heavy border-2 border-command-border hover:border-pulse-500 text-white rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2"
-                  >
+                    className="group px-6 sm:px-8 py-3 sm:py-4 glass-heavy border-2 border-command-border hover:border-pulse-500 text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-2">
+                  
                     <Eye className="w-5 h-5" />
                     <span>View Live Map</span>
                   </Link>
                 </div>
 
                 {/* Quick stats */}
-                <div className="grid grid-cols-3 gap-4 pt-4">
-                  <div className="glass rounded-lg p-4 border border-command-border">
-                    <div className="text-2xl font-bold text-white mb-1">
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-2 sm:pt-4">
+                  <div className="glass rounded-lg p-2 sm:p-4 border border-command-border">
+                    <div className="text-lg sm:text-2xl font-bold text-white mb-1">
                       <AnimatedCounter end={stats.activeUsers} />+
                     </div>
-                    <div className="text-xs text-gray-400 uppercase tracking-wider font-mono">Active Users</div>
+                    <div className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-mono">Active Users</div>
                   </div>
-                  <div className="glass rounded-lg p-4 border border-command-border">
-                    <div className="text-2xl font-bold text-white mb-1">
+                  <div className="glass rounded-lg p-2 sm:p-4 border border-command-border">
+                    <div className="text-lg sm:text-2xl font-bold text-white mb-1">
                       <AnimatedCounter end={stats.citiesCovered} />
                     </div>
-                    <div className="text-xs text-gray-400 uppercase tracking-wider font-mono">Cities</div>
+                    <div className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-mono">Cities</div>
                   </div>
-                  <div className="glass rounded-lg p-4 border border-command-border">
-                    <div className="text-2xl font-bold text-pulse-400 mb-1">
-                      {stats.avgResponseTime}<span className="text-sm">min</span>
+                  <div className="glass rounded-lg p-2 sm:p-4 border border-command-border">
+                    <div className="text-lg sm:text-2xl font-bold text-pulse-400 mb-1">
+                      {stats.avgResponseTime}<span className="text-xs sm:text-sm">min</span>
                     </div>
-                    <div className="text-xs text-gray-400 uppercase tracking-wider font-mono">Response</div>
+                    <div className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-mono">Response</div>
                   </div>
                 </div>
               </div>

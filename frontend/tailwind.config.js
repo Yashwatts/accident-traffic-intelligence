@@ -6,6 +6,22 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '475px',
+        '3xl': '1920px',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '112': '28rem',
+        '128': '32rem',
+      },
+      minHeight: {
+        'screen-safe': '100dvh', // Dynamic viewport height for mobile
+      },
+      maxHeight: {
+        'screen-safe': '100dvh',
+      },
       colors: {
         // Dark command center theme
         'command': {
@@ -36,6 +52,7 @@ export default {
           moderate: '#ffd23f',
           low: '#06ffa5',
           info: '#00d9ff',
+          safe: '#06ffa5',
         },
         // Status indicators
         'status': {
