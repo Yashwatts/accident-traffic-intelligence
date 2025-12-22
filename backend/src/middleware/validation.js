@@ -41,6 +41,7 @@ export const userSchemas = {
       .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
     phoneNumber: z.string()
       .optional()
+      .transform(val => val === '' ? undefined : val)
       .refine(val => !val || validator.isMobilePhone(val), 'Invalid phone number')
   }),
 
@@ -162,8 +163,11 @@ export function validate(schema, source = 'body') {
         
         return res.status(400).json({
           success: false,
-          error: 'Validation failed',
-          details: errors
+          error: {
+            message: 'Validation failed',
+            code: 'VALIDATION_ERROR',
+            details: errors
+          }
         });
       }
       
