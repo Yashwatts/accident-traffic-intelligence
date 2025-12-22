@@ -35,6 +35,13 @@ function RegisterPage() {
       console.error('Registration failed:', error);
       console.error('Error message:', error.message);
       console.error('Error details:', error.details);
+      
+      // Display validation errors as toast messages
+      if (error.details && Array.isArray(error.details)) {
+        error.details.forEach(detail => {
+          addToast(`${detail.field}: ${detail.message}`, 'error');
+        });
+      }
     }
   };
 
