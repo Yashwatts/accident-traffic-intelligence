@@ -178,15 +178,18 @@ export const verifyIncidentController = async (req, res, next) => {
 export const updateIncidentStatusController = async (req, res, next) => {
   try {
     const userId = req.user?.id;
+    const userRole = req.user?.role;
+    
     if (!userId) {
       throw ApiError.unauthorized('Authentication required');
     }
 
     const { status, notes } = req.body;
-    const incident = await incidentService.updateIncident(
+    const incident = await incidentService.updateIncidentStatus(
       req.params.id,
       { status, notes },
-      userId
+      userId,
+      userRole
     );
 
     return ApiResponse.success(res, incident, 'Incident status updated successfully');

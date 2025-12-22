@@ -145,6 +145,34 @@ export const updateIncident = async (incidentId, updateData, userId) => {
 };
 
 /**
+ * Update incident status (for admins/responders)
+ */
+export const updateIncidentStatus = async (incidentId, updateData, userId, userRole) => {
+  const incident = await Incident.findById(incidentId);
+
+  if (!incident) {
+    throw ApiError.notFound('Incident not found');
+  }
+
+  // Allow admins and responders to update status
+  if (!['admin', 'responder'].includes(userRole)) {
+    throw ApiError.forbidden('Only admins and responders can update incident status');
+  }
+
+  Object.assign(incident, updateData);
+  incident.updateCount += 1;
+  await incident.save();
+
+  logger.info('Incident status updated', {
+    incidentId: incident._id,
+    userId,
+    status: updateData.status,
+  });
+
+  return incident;
+};
+
+/**
  * Delete incident
  */
 export const deleteIncident = async (incidentId, userId) => {
